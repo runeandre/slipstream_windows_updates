@@ -31,11 +31,11 @@ I would recommend using an ISO from Microsoft where SP1 is already integrated. A
 
 For Windows Updates, I would recommend adding the update files in the following folder structure.
 - <b>windows7_updates</b>
-	- <b>1</b>
+	- <b>01</b>
 		- windows6.1-kb3020369-***.msu
-	- <b>2</b> 
+	- <b>02</b> 
 		- windows6.1-kb3125574-v4-***.msu
-	- <b>3</b> 
+	- <b>03</b> 
 		- windows6.1-kb4056894-***.msu
 - <b>windows7_ie11</b>
 	- Internet Explorer 11 + Prerequisites files
@@ -61,9 +61,9 @@ Install them in order top to bottom, either only the x86 or x64 files.
 Put the files in separate numbered subfolders in the folder "windows7_updates" from top to bottom.
 
 - <b>windows7_updates</b>
-	- <b>1</b>
+	- <b>01</b>
 		- windows6.1-kb3020369-...
-	- <b>2</b>
+	- <b>02</b>
 		- windows6.1-kb3125574-v4-...
 	- ...
 
