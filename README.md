@@ -81,7 +81,7 @@ If you want to slipstream Service Pack 1 onto an ISO without Service Pack 1 on i
 Download the SP1 files to the folder "Windows 7\Service Pack 1\", create it if missing in the same folder as this README file and the script files.
 
 | Architecture | Filename / Link |
-| --- | --- | --- | 
+| --- | --- | 
 | x86 | [windows6.1-kb2533552-x86_f2061d1c40b34f88efbe55adf6803d278aa67064.msu](http://download.windowsupdate.com/msdownload/update/software/crup/2011/05/windows6.1-kb2533552-x86_f2061d1c40b34f88efbe55adf6803d278aa67064.msu) |
 | x86 | [windows6.1-kb976932-x86_c3516bc5c9e69fee6d9ac4f981f5b95977a8a2fa.exe](http://download.windowsupdate.com/msdownload/update/software/svpk/2011/02/windows6.1-kb976932-x86_c3516bc5c9e69fee6d9ac4f981f5b95977a8a2fa.exe) |
 | x64 | [windows6.1-kb2533552-x64_0ba5ac38d4e1c9588a1e53ad390d23c1e4ecd04d.msu](http://download.windowsupdate.com/msdownload/update/software/crup/2011/05/windows6.1-kb2533552-x64_0ba5ac38d4e1c9588a1e53ad390d23c1e4ecd04d.msu) |
