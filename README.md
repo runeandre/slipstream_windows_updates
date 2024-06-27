@@ -13,16 +13,16 @@ Slipstreaming Windows 10 and 11 updates and producing a bootable ISO should also
 <br>More info below about this.
 3. Download the Windows updates you want to integrate into the Windows ISO.
 <br>You can use the following scripts to download all the Windows 7 updates until January 2020 into the correct folders, use the one that matches your ISOs architecture.
-- "<b>Download Windows 7 x64 Updates.bat</b>"
-- "<b>Download Windows 7 x86 Updates.bat</b>"
+<br>- "<b>Download Windows 7 x64 Updates.bat</b>"
+<br>- "<b>Download Windows 7 x86 Updates.bat</b>"
 <br>(x64 = 64-bit / x86 = 32-bit)
 4. Any files or folders put in the "<b>Copy To ISO</b>" folder will be added to the root of the new Windows ISO file.
 5. Script Requirements:
-- Windows with Powershell (made and tested in Windows 11)
-- [DISM](https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/what-is-dism) (Should come with Windows)
-- [Oscdimg](https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/oscdimg-command-line-options) (Auto installed by the script if missing)
-- Enough free HDD space
-- Enough time!!! (the script can take multiple hours to complete)
+<br>- Windows with Powershell (made and tested in Windows 11)
+<br>- [DISM](https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/what-is-dism) (Should come with Windows)
+<br>- [Oscdimg](https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/oscdimg-command-line-options) (Auto installed by the script if missing)
+<br>- Enough free HDD space
+<br>- Enough time!!! (the script can take multiple hours to complete)
 6. Run the "<b>Update ISO.bat</b>" to create a updated Windows 7 ISO file.
 <br>- The "Windows.iso" file is NOT updated.
 <br>- A new Windows ISO file is created, and the filename is specified when the script is finished.
