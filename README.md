@@ -39,6 +39,12 @@ You will only need to download the files that matches the architecture of the DV
 These are just some file suggestions on what to [use/google for on archive sites](https://archive.org/search?query=x17-59186.iso) and such.
 <br>Feel free to use other ISOs.
 
+I have tested with the Windows 7 ISOs: 
+- x17-59186.iso
+- HP OEM Win 7 Pro 64.iso
+- en_windows_7_professional_x86_dvd_x15-65804
+- en_windows_7_professional_x64_dvd_X15-65805
+
 Use the ISO/DVD that matches the CD-keys/license you have.
 <br>There are no CD-keys etc here!
 
