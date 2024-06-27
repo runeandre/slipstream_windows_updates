@@ -1,6 +1,5 @@
 *.exe
 *.iso
-tmp
-windows7_ie11
-windows7_sp1
-windows7_updates
+TMP
+Copy To ISO
+Windows 7

@@ -22,36 +22,39 @@ $oscdimg_x86 = "$($program_files_x86)\Windows Kits\10\Assessment and Deployment 
 $oscdimg_x64 = "$($program_files_x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64\Oscdimg\oscdimg.exe"
 
 # DVD
-$folder_name_tmp = "tmp"
+$folder_name_tmp = "TMP"
 $folder_tmp = "$($PWD)\$($folder_name_tmp)"
-$folder_win_dvd = "$($folder_tmp)\win_dvd"
+$folder_windows_iso = "$($folder_tmp)\Windows ISO"
+$folder_copy_to_iso = "$($PWD)\Copy To ISO"
 $dvd_source_name = "Windows.iso"
 $dvd_target_name = "Windows_DVD.iso"
 $installFile = "install."
 
 # Windows Updates
-$folder_cwd_windows_updates = "$($PWD)\windows_updates"
+$folder_cwd_windows_updates = "$($PWD)\Windows Updates"
 
 # Windows 7 Updates
-$folder_cwd_windows7_updates = "$($PWD)\windows7_updates"
+$folder_cwd_windows7 = "$($PWD)\Windows 7"
+$folder_cwd_windows7_updates = "$($folder_cwd_windows7)\Updates"
 
 # Windows 7 IE11
-$folder_cwd_windows7_ie11 = "$($PWD)\windows7_ie11"
-$folder_tmp_windows7_ie11 = "$($folder_tmp)\windows7_ie11"
+$folder_cwd_windows7_ie11 = "$($folder_cwd_windows7)\Internet Explorer 11"
+$folder_tmp_windows7_ie11 = "$($folder_tmp)\Windows 7 IE11"
 $win7_ie11_x86 = "IE11-Windows6.1-x86-en-us.exe"
 $win7_ie11_x64 = "IE11-Windows6.1-x64-en-us.exe"
-$win7_ie11_support = "IE_SUPPORT_amd64_en-US.CAB"
+$win7_ie11_support_x86 = "IE_SUPPORT_x86_en-US.CAB"
+$win7_ie11_support_x64 = "IE_SUPPORT_amd64_en-US.CAB"
 $win7_ie11_spelling = "IE-Spelling-en.msu"
 $win7_ie11_hyphenation = "IE-Hyphenation-en.msu"
 $win7_ie11_iewin7 = "IE-Win7.CAB"
 
 # Win7 SP1
-$folder_tmp_windows7_sp1 = "$($folder_tmp)\windows7_sp1"
-$folder_cwd_windows7_sp1 = "$($PWD)\windows7_sp1"
-$win7_pre_sp1_x86 = "windows6.1-kb2533552-x86.msu"
-$win7_pre_sp1_x64 = "windows6.1-kb2533552-x64.msu"
-$win7_sp1_exe_x86 = "windows6.1-kb976932-x86.exe"
-$win7_sp1_exe_x64 = "windows6.1-kb976932-x64.exe"
+$folder_tmp_windows7_sp1 = "$($folder_tmp)\Windows 7 SP1"
+$folder_cwd_windows7_sp1 = "$($folder_cwd_windows7)\Service Pack 1"
+$win7_pre_sp1_x86 = "windows6.1-kb2533552-x86_f2061d1c40b34f88efbe55adf6803d278aa67064.msu"
+$win7_pre_sp1_x64 = "windows6.1-kb2533552-x64_0ba5ac38d4e1c9588a1e53ad390d23c1e4ecd04d.msu"
+$win7_sp1_exe_x86 = "windows6.1-kb976932-x86_c3516bc5c9e69fee6d9ac4f981f5b95977a8a2fa.exe"
+$win7_sp1_exe_x64 = "windows6.1-kb976932-x64_74865ef2562006e51d7f9333b4a8d45b7a749dab.exe"
 $win7_sp1_cab_x86 = "windows6.1-KB976932-X86.cab"
 $win7_sp1_cab_x64 = "windows6.1-KB976932-X64.cab"
 $win7_sp1_NestedMPPContent_cab = "NestedMPPContent.cab"
@@ -71,20 +74,20 @@ $win7_sp1_KB976933_LangsCab6_cab = "KB976933-LangsCab6.cab"
 
 # For x86 32-bit systems
 $oscdimg = $oscdimg_x86
-$win7_sp1_exe = $win7_sp1_exe_x86
-$win7_sp1_cab = $win7_sp1_cab_x86
-$win7_pre_sp1 = $win7_pre_sp1_x86
-$win7_ie11 = $win7_ie11_x86
 
 # For x86 64-bit systems
 if ([Environment]::Is64BitProcess) {
     $oscdimg = $oscdimg_x64
-	$win7_sp1_exe = $win7_sp1_exe_x64
-	$win7_sp1_cab = $win7_sp1_cab_x64
-	$win7_pre_sp1 = $win7_pre_sp1_x64
-	$win7_ie11 = $win7_ie11_x64
 }
 
+if(-Not ([System.IO.File]::Exists("$dvd_source_name"))){
+	Write-Host " "
+	Write-Host "Cannot find the ""$($dvd_source_name)"" file, the source Windows DVD image file."
+	Write-Host "Please select an ISO file you want to use, name it ""$($dvd_source_name)"" and put it in the folder ""$($PWD)\""."
+	Write-Host " "
+
+	Exit
+}
 
 ### Check if expand.exe exists ###
 if (![System.IO.File]::Exists("$($expand_exe)")) {
@@ -120,46 +123,6 @@ Write-Host "ISO file: $($isoPath)"
 ### Unmount the ISO if already mounted
 $isoDrive = Get-DiskImage -ImagePath $isoPath
 $isoDrive | Dismount-DiskImage | Out-Null
-
-### Delete old files and folders
-Write-Host " "
-Write-Host "Delete old files and folders. (This can take a while due to many small files!)"
-Remove-Item "$($PWD)\$($dvd_target_name)" -Force -Confirm:$false -ErrorAction SilentlyContinue
-if(Test-Path -Path "$($folder_tmp)"){
-	attrib -r -h "$($folder_tmp)" /s /d
-	Remove-Item "$($folder_tmp)" -Recurse -Force -Confirm:$false -ErrorAction SilentlyContinue
-}
-
-# Has tmp been deleted, if not, try harder
-# This might been required if the script was aborted, and wims not unmounted properly.
-if(Test-Path -Path "$($folder_tmp)"){
-	Write-Host " "
-	Write-Host """$($folder_tmp)"" was not removed, let's try again after running ""dism /cleanup-wim"""
-	Write-Host " "
-	
-	dism /cleanup-wim
-	
-	### Unmount the ISO if already mounted
-	$isoDrive = Get-DiskImage -ImagePath $isoPath
-	$isoDrive | Dismount-DiskImage | Out-Null
-	
-	if(Test-Path -Path "$($folder_tmp)"){
-		attrib -r -h "$($folder_tmp)" /s /d
-		Remove-Item "$($folder_tmp)" -Recurse -Force -Confirm:$false -ErrorAction SilentlyContinue
-	}
-	
-	if(Test-Path -Path "$($folder_tmp)"){
-		Write-Host " "
-		Write-Host "################################################################################"
-		Write-Host """$($folder_tmp)"" not removed! Please help! Maybe restart the PC and try again?"
-		Write-Host "Maybe you need to close a terminal or something that is open in the tmp folder? "
-		Write-Host "You can try running the command ""dism /cleanup-wim"" as an admin."
-		Write-Host "################################################################################"
-		Write-Host " "
-		
-		Exit
-	}
-}
 
 ### Mount ISO
 $isoDrive = Mount-DiskImage -ImagePath $isoPath -PassThru | Get-Volume
@@ -245,17 +208,20 @@ if($dvd_windows_list.Keys -contains $selection){
 ################################
 $dvd_windows_version_array = Dism /Get-ImageInfo /ImageFile:"$($isoDriveLetter)sources\$($installFile)" /index:$selection | Select-String "Name : Windows"
 $dvd_architecture_array = Dism /Get-ImageInfo /ImageFile:"$($isoDriveLetter)sources\$($installFile)" /index:$selection | Select-String "Architecture : "
+$dvd_servicepack_level_array = Dism /Get-ImageInfo /ImageFile:"$($isoDriveLetter)sources\$($installFile)" /index:$selection | Select-String "ServicePack Level : "
 
 # Trim the start of the string array and save as string
 $dvd_windows_version = $dvd_windows_version_array[0] -Replace "Name : ",""
 $dvd_architecture = $dvd_architecture_array[0] -Replace "Architecture : ",""
+$dvd_servicepack_level = $dvd_servicepack_level_array[0] -Replace "ServicePack Level : ",""
 
 # Add DVD Windows name to target ISO name
-$dvd_target_name = "$($dvd_windows_version.replace(" ","_")).iso"
+$dvd_target_name = "$($dvd_windows_version) $($dvd_architecture).iso"
 
 Write-Host " "
 Write-Host "Name: $($dvd_windows_version)"
 Write-Host "Architecture: $($dvd_architecture)"
+Write-Host "ServicePack Level: $($dvd_servicepack_level)"
 
 $dvd_version_win7 = "7"
 $dvd_version_win7_name = "Windows 7"
@@ -282,10 +248,68 @@ if ("$($dvd_windows_version)" -like "*$($dvd_version_win7_name)*"){
 	exit
 }
 
+### Set architecture ###
+
+# For x86 32-bit systems
+$win7_sp1_exe = $win7_sp1_exe_x86
+$win7_sp1_cab = $win7_sp1_cab_x86
+$win7_pre_sp1 = $win7_pre_sp1_x86
+$win7_ie11 = $win7_ie11_x86
+$win7_ie11_support = $win7_ie11_support_x86
+
+# For x86 64-bit systems
+if ($dvd_architecture -eq "x64") {
+	$win7_sp1_exe = $win7_sp1_exe_x64
+	$win7_sp1_cab = $win7_sp1_cab_x64
+	$win7_pre_sp1 = $win7_pre_sp1_x64
+	$win7_ie11 = $win7_ie11_x64
+	$win7_ie11_support = $win7_ie11_support_x64
+}
+
 
 ##################################
 ### File and folder operations ###
 ##################################
+
+### Delete old files and folders
+Write-Host " "
+Write-Host "Delete old files and folders. (This can take a while due to many small files!)"
+Remove-Item "$($PWD)\$($dvd_target_name)" -Force -Confirm:$false -ErrorAction SilentlyContinue
+if(Test-Path -Path "$($folder_tmp)"){
+	attrib -r -h "$($folder_tmp)" /s /d
+	Remove-Item "$($folder_tmp)" -Recurse -Force -Confirm:$false -ErrorAction SilentlyContinue
+}
+
+# Has tmp been deleted, if not, try harder
+# This might been required if the script was aborted, and wims not unmounted properly.
+if(Test-Path -Path "$($folder_tmp)"){
+	Write-Host " "
+	Write-Host """$($folder_tmp)"" was not removed, let's try again after running ""dism /cleanup-wim"""
+	Write-Host " "
+	
+	dism /cleanup-wim
+	
+	### Unmount the ISO if already mounted
+	$isoDrive = Get-DiskImage -ImagePath $isoPath
+	$isoDrive | Dismount-DiskImage | Out-Null
+	
+	if(Test-Path -Path "$($folder_tmp)"){
+		attrib -r -h "$($folder_tmp)" /s /d
+		Remove-Item "$($folder_tmp)" -Recurse -Force -Confirm:$false -ErrorAction SilentlyContinue
+	}
+	
+	if(Test-Path -Path "$($folder_tmp)"){
+		Write-Host " "
+		Write-Host "################################################################################"
+		Write-Host """$($folder_tmp)"" not removed! Please help! Maybe restart the PC and try again?"
+		Write-Host "Maybe you need to close a terminal or something that is open in the tmp folder? "
+		Write-Host "You can try running the command ""dism /cleanup-wim"" as an admin."
+		Write-Host "################################################################################"
+		Write-Host " "
+		
+		Exit
+	}
+}
 
 ### Delete old ISOs with the version in the name
 Remove-Item "$($PWD)\$($dvd_target_name)" -Force -Confirm:$false -ErrorAction SilentlyContinue
@@ -353,31 +377,53 @@ if ($dvd_windows_version -eq $dvd_version_win7) {
 	}
 }
 
+if(-Not (Test-Path -Path "$folder_copy_to_iso")){
+	mkdir "$($folder_copy_to_iso)"
+		
+		Write-Host " "
+		Write-Host "The folder ""$($folder_copy_to_iso)"" was missing and has been created."
+		Write-Host "Any files or folders you put here will be copied onto the finished ISO"
+		Write-Host " "
+		Write-Host "Press any key to continue!"
+		Write-Host " "
+		
+		Pause
+}
+
 Write-Host " "
-Write-Host "Creating the '$($folder_tmp)' and '$($folder_win_dvd)' folders"
-mkdir "$($folder_win_dvd)"
+Write-Host "Creating the '$($folder_tmp)' and '$($folder_windows_iso)' folders"
+mkdir "$($folder_windows_iso)"
 
 ### Copy CD content to the tmp\win_dvd folder
 Write-Host " "
-Write-Host "Copy Windows DVD files from '$($isoDriveLetter)' to '$($folder_win_dvd)' (This takes a while!)"
-Copy-item -Force -Recurse "$($isoDriveLetter)*" -Destination "$($folder_win_dvd)" #-Verbose
+Write-Host "Copy Windows DVD files from '$($isoDriveLetter)' to '$($folder_windows_iso)' (This takes a while!)"
+Copy-item -Force -Recurse "$($isoDriveLetter)*" -Destination "$($folder_windows_iso)" #-Verbose
 
 ### Unmount ISO
 $isoDrive = Get-DiskImage -ImagePath "$($isoPath)"
 $isoDrive | Dismount-DiskImage | Out-Null
 
+### Copy OEM activation
+if(Test-Path -Path "$folder_copy_to_iso"){
+	Write-Host " "
+	Write-Host "Copying the ""$folder_copy_to_iso"" folder to ""$($folder_windows_iso)"". It will be included in the finished ISO."
+	Copy-item -Force -Recurse "$folder_copy_to_iso\*" -Destination "$($folder_windows_iso)\"
+}
+
 ### Read Write permissions
 attrib -r -h "$($folder_tmp)\*.*" /s /d
 
+Exit
+
 # Remove the other Windows versions in the install image, from last to first to avoid index numbering issues
 Write-Host " "
-Write-Host "Remove the images not to be updated from the $($folder_win_dvd)\sources\$($installFile) file."
+Write-Host "Remove the images not to be updated from the $($folder_windows_iso)\sources\$($installFile) file."
 for($i=$dvd_windows_info_index_trimmed.count-1;$i -ge 0; $i--){
 	$info_index = $dvd_windows_info_index_trimmed[$i]
 	
 	if($info_index -ne $selection){
 		Write-Host "Remove the $($dvd_windows_list[$info_index]) image with index number $($info_index)."
-		Remove-WindowsImage -ImagePath "$($folder_win_dvd)\sources\$($installFile)" -Index $info_index -CheckIntegrity
+		Remove-WindowsImage -ImagePath "$($folder_windows_iso)\sources\$($installFile)" -Index $info_index -CheckIntegrity
 	}
 }
 #Reset selection since there is now only one image in the install image
@@ -387,7 +433,8 @@ $selection = 1
 ##################################
 ### Windows 7 - Service Pack 1 ###
 ##################################
-if ($dvd_windows_version -eq $dvd_version_win7 -And [System.IO.File]::Exists("$($folder_cwd_windows7_sp1)\$($win7_sp1_exe)")) {
+# Unpack Service Pack 1 if it's Windows 7, has Service Pack Level 0 and the service pack file exists
+if ($dvd_windows_version -eq $dvd_version_win7 -And $dvd_servicepack_level -eq "0" -And [System.IO.File]::Exists("$($folder_cwd_windows7_sp1)\$($win7_sp1_exe)")) {
 	mkdir "$($folder_tmp_windows7_sp1)"
 
 	# Extract SP1
@@ -464,7 +511,13 @@ if ($dvd_windows_version -eq $dvd_version_win7 -And [System.IO.File]::Exists("$(
 ######################################
 ## Windows 7 - Internet Explorer 11 ##
 ######################################
+Write-Host " "
+Write-Host "Prepare Internet Explorer 11 files"
+Write-Host "CWD Folder & File: $($folder_cwd_windows7_ie11)\$($win7_ie11)"
+Write-Host "TMP Folder: $($folder_tmp_windows7_ie11)"
 if ($dvd_windows_version -eq $dvd_version_win7 -And [System.IO.File]::Exists("$($folder_cwd_windows7_ie11)\$($win7_ie11)")) {
+	Write-Host "File Found"
+	
 	mkdir "$($folder_tmp_windows7_ie11)"
 	
 	# Extract SP1
@@ -472,18 +525,18 @@ if ($dvd_windows_version -eq $dvd_version_win7 -And [System.IO.File]::Exists("$(
 }
 
 
-
 ######################
 ### Update Windows ###
 ######################
 
 ### Windows 7 Service Pack 1 ###
-if ($dvd_windows_version -eq $dvd_version_win7 -And [System.IO.File]::Exists("$($folder_cwd_windows7_sp1)\$($win7_sp1_exe)")) {
+# Install Service Pack 1 if it's Windows 7, has Service Pack Level 0 and the service pack file exists
+if ($dvd_windows_version -eq $dvd_version_win7 -And $dvd_servicepack_level -eq "0" -And [System.IO.File]::Exists("$($folder_cwd_windows7_sp1)\$($win7_sp1_exe)")) {
 	# Create mount folder 
 	mkdir "$($folder_tmp)\mount"
 		
 	# Mount
-	dism /mount-wim /wimfile:"$($folder_win_dvd)\sources\$($installFile)" /index:$selection /mountdir:"$($folder_tmp)\mount"
+	dism /mount-wim /wimfile:"$($folder_windows_iso)\sources\$($installFile)" /index:$selection /mountdir:"$($folder_tmp)\mount"
 
 	Write-Host " "
 	Write-Host "Update ""$($folder_tmp)\mount"" with the update ""$($folder_cwd_windows7_sp1)\$($win7_pre_sp1)"""
@@ -511,7 +564,7 @@ if ($dvd_windows_version -eq $dvd_version_win7) {
 		# Check that update folder is not empty
 		if (Test-Path "$($_.FullName)\*") {
 			# Mount
-			dism /mount-wim /wimfile:"$($folder_win_dvd)\sources\$($installFile)" /index:$selection /mountdir:"$($folder_tmp)\mount"
+			dism /mount-wim /wimfile:"$($folder_windows_iso)\sources\$($installFile)" /index:$selection /mountdir:"$($folder_tmp)\mount"
 			
 			Write-Host " "
 			Write-Host "Slipstream updates in the subfolder ""$($_.FullName)"" (This can take a while!!! Ignore missmatch errors!)"
@@ -526,7 +579,7 @@ if ($dvd_windows_version -eq $dvd_version_win7) {
 	# Check that update folder is not empty
 	if (Test-Path "$($folder_cwd_windows7_updates)\*") {
 		# Mount
-		dism /mount-wim /wimfile:"$($folder_win_dvd)\sources\$($installFile)" /index:$selection /mountdir:"$($folder_tmp)\mount"
+		dism /mount-wim /wimfile:"$($folder_windows_iso)\sources\$($installFile)" /index:$selection /mountdir:"$($folder_tmp)\mount"
 		
 		Write-Host " "
 		Write-Host "Slipstream updates (This can take a while!!! Ignore missmatch errors!)"
@@ -540,7 +593,7 @@ if ($dvd_windows_version -eq $dvd_version_win7) {
 	# Check that update folder is not empty
 	if (Test-Path "$($folder_cwd_windows7_ie11)\*") {
 		# Mount
-		dism /mount-wim /wimfile:"$($folder_win_dvd)\sources\$($installFile)" /index:$selection /mountdir:"$($folder_tmp)\mount"
+		dism /mount-wim /wimfile:"$($folder_windows_iso)\sources\$($installFile)" /index:$selection /mountdir:"$($folder_tmp)\mount"
 		
 		Write-Host " "
 		Write-Host "Slipstream Internet Explorer 11 Prerequisites"
@@ -551,7 +604,7 @@ if ($dvd_windows_version -eq $dvd_version_win7) {
 		dism /unmount-image /mountdir:"$($folder_tmp)\mount" /commit
 		
 		# Mount
-		dism /mount-wim /wimfile:"$($folder_win_dvd)\sources\$($installFile)" /index:$selection /mountdir:"$($folder_tmp)\mount"
+		dism /mount-wim /wimfile:"$($folder_windows_iso)\sources\$($installFile)" /index:$selection /mountdir:"$($folder_tmp)\mount"
 		
 		Write-Host " "
 		Write-Host "Slipstream Internet Explorer 11"
@@ -577,7 +630,7 @@ if ($dvd_windows_version -eq $dvd_version_win7) {
 		# Check that update folder is not empty
 		if (Test-Path "$($_.FullName)\*") {
 			# Mount
-			dism /mount-wim /wimfile:"$($folder_win_dvd)\sources\$($installFile)" /index:$selection /mountdir:"$($folder_tmp)\mount"
+			dism /mount-wim /wimfile:"$($folder_windows_iso)\sources\$($installFile)" /index:$selection /mountdir:"$($folder_tmp)\mount"
 			
 			Write-Host " "
 			Write-Host "Slipstream updates in the subfolder ""$($_.FullName)"" (This can take a while!!! Ignore missmatch errors!)"
@@ -592,7 +645,7 @@ if ($dvd_windows_version -eq $dvd_version_win7) {
 	# Check that update folder is not empty
 	if (Test-Path "$($folder_cwd_windows_updates)\*") {
 		# Mount
-		dism /mount-wim /wimfile:"$($folder_win_dvd)\sources\$($installFile)" /index:$selection /mountdir:"$($folder_tmp)\mount"
+		dism /mount-wim /wimfile:"$($folder_windows_iso)\sources\$($installFile)" /index:$selection /mountdir:"$($folder_tmp)\mount"
 		
 		Write-Host " "
 		Write-Host "Slipstream updates (This can take a while!!! Ignore missmatch errors!)"
@@ -610,10 +663,10 @@ if ($dvd_windows_version -eq $dvd_version_win7) {
 ###################
 if ($dvd_windows_version -eq $dvd_version_win7) {
 	# Windows 7 ISO
-	& $oscdimg -m -o -h -u2 -udfver102 -b"$($folder_win_dvd)\boot\etfsboot.com" "$($folder_win_dvd)" "$($PWD)\$($dvd_target_name)"
+	& $oscdimg -m -o -h -u2 -udfver102 -b"$($folder_windows_iso)\boot\etfsboot.com" "$($folder_windows_iso)" "$($PWD)\$($dvd_target_name)"
 } else {
 	# ISO for all other versions of Windows (10 and 11 should work)
-	& $oscdimg -m -o -u2 -udfver102 -bootdata:2#p0,e,b"$($folder_win_dvd)\boot\etfsboot.com"#pEF,e,b"$($folder_win_dvd)\efi\microsoft\boot\efisys.bin" "$($folder_win_dvd)" "$($PWD)\$($dvd_target_name)"
+	& $oscdimg -m -o -u2 -udfver102 -bootdata:2#p0,e,b"$($folder_windows_iso)\boot\etfsboot.com"#pEF,e,b"$($folder_windows_iso)\efi\microsoft\boot\efisys.bin" "$($folder_windows_iso)" "$($PWD)\$($dvd_target_name)"
 }
 
 ### Finished

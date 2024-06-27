@@ -4,6 +4,30 @@ This script was made firstly with Windows 7 in mind, and is what I have tested i
 
 Slipstreaming Windows 10 and 11 updates and producing a bootable ISO should also be possible, but not tested yet.
 
+# Guide
+
+## Windows 7
+
+1. [Download these scripts](https://github.com/runeandre/slipstream_windows_updates/archive/refs/heads/main.zip), extract the scripts into a folder and open that folder.
+2. Get a Windows 7 ISO, put it into the scripts folder (you opened above), and rename the Windows ISO file to "Windows.iso".
+<br>More info below about this.
+3. Download the Windows updates you want to integrate into the Windows ISO.
+<br>You can use the following scripts to download all the Windows 7 updates until January 2020 into the correct folders, use the one that matches your ISOs architecture.
+- "<b>Download Windows 7 x64 Updates.bat</b>"
+- "<b>Download Windows 7 x86 Updates.bat</b>"
+<br>(x64 = 64-bit / x86 = 32-bit)
+4. Any files or folders put in the "<b>Copy To ISO</b>" folder will be added to the root of the new Windows ISO file.
+5. Script Requirements:
+- Windows with Powershell (made and tested in Windows 11)
+- [DISM](https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/what-is-dism) (Should come with Windows)
+- [Oscdimg](https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/oscdimg-command-line-options) (Auto installed by the script if missing)
+- Enough free HDD space
+- Enough time!!! (the script can take multiple hours to complete)
+6. Run the "<b>Update ISO.bat</b>" to create a updated Windows 7 ISO file.
+<br>- The "Windows.iso" file is NOT updated.
+<br>- A new Windows ISO file is created, and the filename is specified when the script is finished.
+<br>- It checks if Service Pack 1 is already installed on the "Windows.iso" file, and skips adding it if "Windows.iso" already has it integrated.
+
 # Required files
 
 ## Windows 7
@@ -29,21 +53,26 @@ Use the ISO/DVD that matches the CD-keys/license you have.
 ### Windows 7 Updates
 I would recommend using an ISO from Microsoft where SP1 is already integrated. Alternatively follow the instructions below.
 
-For Windows Updates, I would recommend adding the update files in the following folder structure.
-- <b>windows7_updates</b>
-	- <b>01</b>
-		- windows6.1-kb3020369-***.msu
-	- <b>02</b> 
-		- windows6.1-kb3125574-v4-***.msu
-	- <b>03</b> 
-		- windows6.1-kb4056894-***.msu
-- <b>windows7_ie11</b>
-	- Internet Explorer 11 + Prerequisites files
+Here is the folder structure for the update files.
+- <b>Windows 7</b>
+	- <b>Internet Explorer 11</b>
+		- Internet Explorer 11 + Prerequisites files
+	- <b>Service Pack 1</b>
+		- windows6.1-kb976932-x64_***.exe
+		- windows6.1-kb2533552-x64_***.msu
+	- <b>Updates</b>
+		- <b>01</b>
+			- windows6.1-kb3020369-***.msu
+		- <b>02</b> 
+			- windows6.1-kb3125574-v4-***.msu
+		- <b>03</b> 
+			- ...
+	
 
 #### Service Pack 1 (KB976932)
 If you want to slipstream Service Pack 1 onto an ISO without Service Pack 1 on it already, download both files matching the architecture of the Windows.ISO file.
 
-Download the SP1 files to the folder <b>windows7_sp1</b>, create it if missing in the same folder as this README file and the script files.
+Download the SP1 files to the folder "Windows 7\Service Pack 1\", create it if missing in the same folder as this README file and the script files.
 
 | Architecture | Filename / Link |
 | --- | --- | --- | 
@@ -58,14 +87,16 @@ Sources:
 
 #### Post Service Pack 1 Rollup packs
 Install them in order top to bottom, either only the x86 or x64 files.
-Put the files in separate numbered subfolders in the folder "windows7_updates" from top to bottom.
+Put the files in separate numbered subfolders in the folder "Windows 7\Updates\" from top to bottom.
 
-- <b>windows7_updates</b>
-	- <b>01</b>
-		- windows6.1-kb3020369-...
-	- <b>02</b>
-		- windows6.1-kb3125574-v4-...
-	- ...
+- <b>Windows 7</b>
+	- <b>Updates</b>
+		- <b>01</b>
+			- windows6.1-kb3020369-***.msu
+		- <b>02</b> 
+			- windows6.1-kb3125574-v4-***.msu
+		- <b>03</b> 
+			- ...
 
 | Architecture | Name | Filename / Link | 
 | --- | --- | --- | 
@@ -97,14 +128,14 @@ Sources:
 
 #### Internet Explorer 11 + Prerequisites 
 
-Put all the files for your DVDs architecture (x86 or x64) in the folder "windows7_ie11".
+Put all the files for your DVDs architecture (x86 or x64) in the folder "Windows 7\Internet Explorer 11\".
 
 Source: https://learn.microsoft.com/en-us/troubleshoot/developer/browsers/installation/prerequisite-updates-for-ie-11
 
 | Architecture | Name | File / Link |
 | --- | --- | --- | 
-| x86 | Internet Explorer 11 (KB2841134) | [IE11-Windows6.1-x86-en-us.exe](https://www.microsoft.com/en-us/download/details.aspx?id=40902)
-| x64 | Internet Explorer 11 (KB2841134) | [IE11-Windows6.1-x64-en-us.exe](https://www.microsoft.com/en-us/download/details.aspx?id=40901)
+| x86 | Internet Explorer 11 (KB2841134) | [IE11-Windows6.1-x86-en-us.exe](http://download.microsoft.com/download/9/2/F/92FC119C-3BCD-476C-B425-038A39625558/IE11-Windows6.1-x86-en-us.exe)
+| x64 | Internet Explorer 11 (KB2841134) | [IE11-Windows6.1-x64-en-us.exe](http://download.microsoft.com/download/7/1/7/7179A150-F2D2-4502-9D70-4B59EA148EAA/IE11-Windows6.1-x64-en-us.exe)
 | x86 | KB2729094 | [windows6.1-kb2729094-v2-x86.msu](https://download.microsoft.com/download/b/6/b/b6bf1d9b-2568-406b-88e8-e4a218dea90a/windows6.1-kb2729094-v2-x86.msu) |
 | x64 | KB2729094 | [windows6.1-kb2729094-v2-x64.msu](https://download.microsoft.com/download/6/c/a/6ca15546-a46c-4333-b405-ab18785abb66/windows6.1-kb2729094-v2-x64.msu) |
 | x86 | KB2731771 | [windows6.1-kb2731771-x86.msu](https://download.microsoft.com/download/a/0/b/a0ba0a59-1f11-4736-91c0-dfcb06224d99/windows6.1-kb2731771-x86.msu) |
