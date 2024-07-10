@@ -413,8 +413,6 @@ if(Test-Path -Path "$folder_copy_to_iso"){
 ### Read Write permissions
 attrib -r -h "$($folder_tmp)\*.*" /s /d
 
-Exit
-
 # Remove the other Windows versions in the install image, from last to first to avoid index numbering issues
 Write-Host " "
 Write-Host "Remove the images not to be updated from the $($folder_windows_iso)\sources\$($installFile) file."
