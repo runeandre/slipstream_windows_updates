@@ -98,15 +98,39 @@ if ($windows -eq $windows7_x86) {
 } elseif ($windows -eq $windows7_x64) {
 	Write-Host " "
 	Write-Host "Download Windows 7 x64 Updates"
-	if(-Not (Test-Path -Path "$folder_cwd_windows7")){
+	if(Test-Path -Path "$folder_cwd_windows7"){
+		$folder_cwd_windows7_new_name = "$($folder_cwd_windows7)_$(([TimeSpan] (Get-Date).ToLongTimeString()).TotalMilliseconds)"
+		
+		Write-Host " "
+		Write-Host "The folder ""$folder_cwd_windows7"" already exists!"
+		Write-Host "Renaming it from ""$folder_cwd_windows7"" to ""$($folder_cwd_windows7_new_name)""."
+		
+		Rename-Item -Path "$folder_cwd_windows7" -NewName "$($folder_cwd_windows7_new_name)"
+
+		mkdir "$($folder_cwd_windows7)"
+	}else{
 		mkdir "$($folder_cwd_windows7)"
 	}
+	
 	if(-Not (Test-Path -Path "$folder_cwd_windows7_updates")){
 		mkdir "$($folder_cwd_windows7_updates)"
+		
+		mkdir "$($folder_cwd_windows7_updates)\01"
+		mkdir "$($folder_cwd_windows7_updates)\02"
+		mkdir "$($folder_cwd_windows7_updates)\03"
+		mkdir "$($folder_cwd_windows7_updates)\04"
+		mkdir "$($folder_cwd_windows7_updates)\05"
+		mkdir "$($folder_cwd_windows7_updates)\06"
+		mkdir "$($folder_cwd_windows7_updates)\07"
+		mkdir "$($folder_cwd_windows7_updates)\08"
+		mkdir "$($folder_cwd_windows7_updates)\09"
+		mkdir "$($folder_cwd_windows7_updates)\10"
 	}
+	
 	if(-Not (Test-Path -Path "$folder_cwd_windows7_sp1")){
 		mkdir "$($folder_cwd_windows7_sp1)"
 	}
+	
 	if(-Not (Test-Path -Path "$folder_cwd_windows7_ie11")){
 		mkdir "$($folder_cwd_windows7_ie11)"
 	}
