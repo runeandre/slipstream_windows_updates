@@ -1,4 +1,11 @@
-﻿Write-Host "######################################################"
+﻿Write-Host "Logging to: $($PWD)\log.txt"
+$ErrorActionPreference="SilentlyContinue"
+Stop-Transcript | out-null
+$ErrorActionPreference = "Continue"
+Start-Transcript -path "$($PWD)\log.txt" -append
+Write-Host " "
+
+Write-Host "######################################################"
 Write-Host "#                                                    #"
 Write-Host "# Update Windows.iso with Windows Updates using DISM #"
 Write-Host "#                                                    #"
@@ -309,6 +316,9 @@ if(Test-Path -Path "$($folder_tmp)"){
 		
 		Exit
 	}
+	
+	### Mount ISO
+	$isoDrive = Mount-DiskImage -ImagePath $isoPath -PassThru | Get-Volume
 }
 
 ### Delete old ISOs with the version in the name
@@ -671,3 +681,8 @@ if ($dvd_windows_version -eq $dvd_version_win7) {
 Write-Host " "
 Write-Host "Finished creating the Windows ISOs!"
 Write-Host "Windows DVD: $($PWD)\$($dvd_target_name)"
+
+
+Write-Host " "
+Write-Host "End logging"
+Stop-Transcript
