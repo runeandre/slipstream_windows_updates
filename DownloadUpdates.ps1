@@ -1,8 +1,8 @@
-﻿Write-Host "######################################################"
-Write-Host "#                                                    #"
+﻿Write-Host "############################"
+Write-Host "#                          #"
 Write-Host "# Download Windows Updates #"
-Write-Host "#                                                    #"
-Write-Host "######################################################"
+Write-Host "#                          #"
+Write-Host "############################"
 Write-Host " "
 
 Write-Host "Current directory: $($PWD)"
@@ -18,6 +18,8 @@ Write-Host " "
 $windows = "$($env:windows)"
 $windows7_x86 = "windows7x86"
 $windows7_x64 = "windows7x64"
+$windows7_x86_esu = "windows7x86_esu"
+$windows7_x64_esu = "windows7x64_esu"
 
 # Windows 7
 $folder_cwd_windows7 = "$($PWD)\Windows 7"
@@ -65,6 +67,12 @@ if ($windows -eq $windows7_x86) {
 	if(-Not (Test-Path -Path "$folder_cwd_windows7_ie11")){
 		mkdir "$($folder_cwd_windows7_ie11)"
 	}
+	
+	Write-Host " "
+	Write-Host "#####################################"
+	Write-Host "# Downloading Windows 7 x86 Updates #"
+	Write-Host "#####################################"
+	Write-Host " "
 	
 	#SP1
 	Write-Host "Download Service Pack 1"
@@ -135,6 +143,12 @@ if ($windows -eq $windows7_x86) {
 		mkdir "$($folder_cwd_windows7_ie11)"
 	}
 	
+	Write-Host " "
+	Write-Host "#####################################"
+	Write-Host "# Downloading Windows 7 x64 Updates #"
+	Write-Host "#####################################"
+	Write-Host " "
+	
 	#SP1
 	Write-Host "Download Service Pack 1"
 	Invoke-WebRequest "http://download.windowsupdate.com/msdownload/update/software/crup/2011/05/windows6.1-kb2533552-x64_0ba5ac38d4e1c9588a1e53ad390d23c1e4ecd04d.msu" -OutFile "$($folder_cwd_windows7_sp1)\windows6.1-kb2533552-x64_0ba5ac38d4e1c9588a1e53ad390d23c1e4ecd04d.msu"
@@ -164,6 +178,66 @@ if ($windows -eq $windows7_x86) {
 	Invoke-WebRequest "https://download.microsoft.com/download/5/a/5/5a548bfe-adc5-414b-b6bd-e1ec27a8dd80/windows6.1-kb2834140-v2-x64.msu" -OutFile "$($folder_cwd_windows7_ie11)\windows6.1-kb2834140-v2-x64.msu"
 	Invoke-WebRequest "https://download.microsoft.com/download/4/1/3/41321d2e-2d08-4699-a635-d9828aadb177/windows6.1-kb2888049-x64.msu" -OutFile "$($folder_cwd_windows7_ie11)\windows6.1-kb2888049-x64.msu"
 	Invoke-WebRequest "https://download.microsoft.com/download/6/1/4/6141bfd5-40fd-4148-a3c9-e355338a9ac8/windows6.1-kb2882822-x64.msu" -OutFile "$($folder_cwd_windows7_ie11)\windows6.1-kb2882822-x64.msu"
+} elseif ($windows -eq $windows7_x86_esu) {
+	Write-Host " "
+	Write-Host "#########################################"
+	Write-Host "# Downloading Windows 7 x86 ESU Updates #"
+	Write-Host "#########################################"
+	Write-Host " "
+	
+	Write-Host " "
+	Write-Host "Remember that these updates are not supported by slipstreaming per default!!!"
+	Write-Host "You will probably have to do some modifications in order for these to work."
+	Write-Host " "
+	
+	Write-Host -NoNewLine 'Press any key to continue...';
+	$null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown');
+	Write-Host " "
+	
+	if(-Not (Test-Path -Path "$folder_cwd_windows7_updates")){
+		mkdir "$($folder_cwd_windows7_updates)"
+		
+		mkdir "$($folder_cwd_windows7_updates)\96"
+		mkdir "$($folder_cwd_windows7_updates)\97"
+		mkdir "$($folder_cwd_windows7_updates)\98"
+		mkdir "$($folder_cwd_windows7_updates)\99"
+	}
+	
+	Write-Host "Download ESU Updates"
+	Invoke-WebRequest "https://catalog.s.download.windowsupdate.com/c/msdownload/update/software/secu/2020/04/windows6.1-kb4555449-x86_36683b4af68408ed268246ee3e89772665572471.msu" -OutFile "$($folder_cwd_windows7_updates)\96\windows6.1-kb4555449-x86_36683b4af68408ed268246ee3e89772665572471.msu"
+	Invoke-WebRequest "https://catalog.s.download.windowsupdate.com/d/msdownload/update/software/secu/2020/07/windows6.1-kb4575903-x86_5905c774f806205b5d25b04523bb716e1966306d.msu" -OutFile "$($folder_cwd_windows7_updates)\97\windows6.1-kb4575903-x86_5905c774f806205b5d25b04523bb716e1966306d.msu"
+	Invoke-WebRequest "https://catalog.s.download.windowsupdate.com/c/msdownload/update/software/secu/2022/09/windows6.1-kb5017397-x86_96b91eb53575a201d59b1a2b540aa15df0d23b3a.msu" -OutFile "$($folder_cwd_windows7_updates)\98\windows6.1-kb5017397-x86_96b91eb53575a201d59b1a2b540aa15df0d23b3a.msu"
+	Invoke-WebRequest "https://catalog.s.download.windowsupdate.com/d/msdownload/update/software/secu/2023/01/windows6.1-kb5022338-x86_490dce532d299588e11abf3790ff1600482525cd.msu" -OutFile "$($folder_cwd_windows7_updates)\99\windows6.1-kb5022338-x86_490dce532d299588e11abf3790ff1600482525cd.msu"
+} elseif ($windows -eq $windows7_x64_esu) {
+	Write-Host " "
+	Write-Host "#########################################"
+	Write-Host "# Downloading Windows 7 x64 ESU Updates #"
+	Write-Host "#########################################"
+	Write-Host " "
+	
+	Write-Host " "
+	Write-Host "Remember that these updates are not supported by slipstreaming per default!!!"
+	Write-Host "You will probably have to do some modifications in order for these to work."
+	Write-Host " "
+	
+	Write-Host -NoNewLine 'Press any key to continue...';
+	$null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown');
+	Write-Host " "
+	
+	if(-Not (Test-Path -Path "$folder_cwd_windows7_updates")){
+		mkdir "$($folder_cwd_windows7_updates)"
+		
+		mkdir "$($folder_cwd_windows7_updates)\96"
+		mkdir "$($folder_cwd_windows7_updates)\97"
+		mkdir "$($folder_cwd_windows7_updates)\98"
+		mkdir "$($folder_cwd_windows7_updates)\99"
+	}
+	
+	Write-Host "Download ESU Updates"
+	Invoke-WebRequest "https://catalog.s.download.windowsupdate.com/c/msdownload/update/software/secu/2020/04/windows6.1-kb4555449-x64_92202202c3dee2f713f67adf6622851b998c6780.msu" -OutFile "$($folder_cwd_windows7_updates)\96\windows6.1-kb4555449-x64_92202202c3dee2f713f67adf6622851b998c6780.msu"
+	Invoke-WebRequest "https://catalog.s.download.windowsupdate.com/d/msdownload/update/software/secu/2020/07/windows6.1-kb4575903-x64_b4d5cf045a03034201ff108c2802fa6ac79459a1.msu" -OutFile "$($folder_cwd_windows7_updates)\97\windows6.1-kb4575903-x64_b4d5cf045a03034201ff108c2802fa6ac79459a1.msu"
+	Invoke-WebRequest "https://catalog.s.download.windowsupdate.com/c/msdownload/update/software/secu/2022/09/windows6.1-kb5017397-x64_2a9999bd20cb964869c59bb16841a76e14030a29.msu" -OutFile "$($folder_cwd_windows7_updates)\98\windows6.1-kb5017397-x64_2a9999bd20cb964869c59bb16841a76e14030a29.msu"
+	Invoke-WebRequest "https://catalog.s.download.windowsupdate.com/d/msdownload/update/software/secu/2023/01/windows6.1-kb5022338-x64_75d100c03bcaee4b62d08004cc382337ed09d327.msu" -OutFile "$($folder_cwd_windows7_updates)\99\windows6.1-kb5022338-x64_75d100c03bcaee4b62d08004cc382337ed09d327.msu"
 }
 
 Write-Host " "

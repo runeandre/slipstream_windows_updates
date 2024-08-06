@@ -4,6 +4,8 @@ This script was made firstly with Windows 7 in mind, and is what I have tested i
 
 Slipstreaming Windows 10 and 11 updates and producing a bootable ISO should also be possible, but not tested yet.
 
+<b>Disclaimer: It's assumed you have any licenses needed to use the ISO's or updates!</b>
+
 # Guide
 
 ## Windows 7
@@ -12,10 +14,20 @@ Slipstreaming Windows 10 and 11 updates and producing a bootable ISO should also
 2. Get a Windows 7 ISO, put it into the scripts folder (you opened above), and rename the Windows ISO file to "Windows.iso".
 <br>More info below about this.
 3. Download the Windows updates you want to integrate into the Windows ISO.
-<br>You can use the following scripts to download all the Windows 7 updates until January 2020 into the correct folders, use the one that matches your ISOs architecture.
-<br>- "<b>Download Windows 7 x64 Updates.bat</b>"
-<br>- "<b>Download Windows 7 x86 Updates.bat</b>"
-<br>(x64 = 64-bit / x86 = 32-bit)
+<br>
+<br><b>You can use the following scripts to download all the normal Windows 7 updates until January 2020 into the correct folders, use the one that matches your ISOs architecture.</b>
+<br>
+<br><i>The ESU updates until January 2023 can also be downloaded, but slipstreaming isn't supported by default. You will have to do some sort of modifications first, or install manually once Windows 7 is installed to the PC. [Read more](#esu-updates) </i>
+
+	| Architecture | Script | Update type |
+	| --- | --- | --- |
+	| <b>x86</b> | <b>[Download Windows 7 Updates x86.bat](https://github.com/runeandre/slipstream_windows_updates/blob/main/Download%20Windows%207%20x86%20Updates.bat)</b> | <b>Normal Updates</b> |
+	| <b>x64</b> | <b>[Download Windows 7 Updates x64.bat](https://github.com/runeandre/slipstream_windows_updates/blob/main/Download%20Windows%207%20x64%20Updates.bat)</b> | <b>Normal Updates</b> |
+	| <i>x86</i> | <i>[Download Windows 7 ESU Updates x86](https://github.com/runeandre/slipstream_windows_updates/blob/main/Download%20Windows%207%20x86%20ESU%20Updates.bat)</i> | <i>ESU Updates (Skip these)</i> |
+	| <i>x64</i> | <i>[Download Windows 7 ESU Updates x64](https://github.com/runeandre/slipstream_windows_updates/blob/main/Download%20Windows%207%20x64%20ESU%20Updates.bat)</i> | <i>ESU Updates (Skip these)</i> |
+	
+	(x64 = 64-bit / x86 = 32-bit)
+
 4. Any files or folders put in the "<b>Copy To ISO</b>" folder will be added to the root of the new Windows ISO file.
 5. Script Requirements:
 <br>- Windows with Powershell (made and tested in Windows 11)
@@ -91,7 +103,9 @@ Sources:
 - https://answers.microsoft.com/en-us/windows/forum/all/extracting-an-update/2f341403-1419-4153-8c4a-e088d6bfdd72
 - https://superuser.com/questions/249275/slipstream-windows-7-service-pack-1
 
-#### Post Service Pack 1 Rollup packs
+#### Updates
+These are the normal Windows 7 updates until January 2020 when support ended.
+
 Install them in order top to bottom, either only the x86 or x64 files.
 Put the files in separate numbered subfolders in the folder "Windows 7\Updates\" from top to bottom.
 
@@ -127,6 +141,7 @@ Put the files in separate numbered subfolders in the folder "Windows 7\Updates\"
 | x86 | KB4539601 - 2020-01 Preview of Monthly Quality Rollup for Windows 7 | [windows6.1-kb4539601-x86_89f30861c9a5d65b68ed1e029a68cf59be39fc13.msu](https://catalog.s.download.windowsupdate.com/d/msdownload/update/software/updt/2020/01/windows6.1-kb4539601-x86_89f30861c9a5d65b68ed1e029a68cf59be39fc13.msu) |
 | x64 | KB4539601 - 2020-01 Preview of Monthly Quality Rollup for Windows 7 | [windows6.1-kb4539601-x64_fb3f59fb0b1d3a4abf4a35230aa88a06996c4a4a.msu](https://catalog.s.download.windowsupdate.com/c/msdownload/update/software/updt/2020/01/windows6.1-kb4539601-x64_fb3f59fb0b1d3a4abf4a35230aa88a06996c4a4a.msu) |
 
+
 Sources:
 - https://forums.malwarebytes.com/topic/274496-how-to-update-windows-7-to-the-latest-security-updates/
 - https://www.reddit.com/r/apexlegends/comments/w80aw8/your_windows_7_system_is_to_outdated_please/
@@ -161,3 +176,27 @@ Source: https://learn.microsoft.com/en-us/troubleshoot/developer/browsers/instal
 
 Source:
 - https://www.escde.net/blog/dism-windows-7-sp1-mit-ie-11-image-bereitstellen
+
+
+#### ESU Updates
+
+These are the extended support updates (ESU) until January 2023 when the extended support ended for Windows 7.
+
+<p><b>Skip these updates! <br>(for most people)</b></p>
+
+<p>Slipstreaming ESU updates isn't supported normally and will fail to install, so you will probably have to do some modifications to the "install.wim" file or the update MSU files them selfs somehow. Or you can install them manually in Windows 7 once it has been installed to the PC.</p>
+
+<p><b>The script "...\Windows 7\ESU Script\ESU_Script.cmd" will be executed if it exists!</b> 
+<br>If you know what updates needs to be done via a script for ESU updates to work, then you can create a "ESU_Script.cmd" script or copy an existing script there and rename it to "ESU_Script.cmd".</p>
+
+
+| Architecture | Name | Filename / Link | 
+| --- | --- | --- | 
+| x86 | KB4555449 - 2020-05 Servicing Stack Update for Windows 7 | [windows6.1-kb4555449-x86_36683b4af68408ed268246ee3e89772665572471.msu](https://catalog.s.download.windowsupdate.com/c/msdownload/update/software/secu/2020/04/windows6.1-kb4555449-x86_36683b4af68408ed268246ee3e89772665572471.msu) |
+| x64 | KB4555449 - 2020-05 Servicing Stack Update for Windows 7 | [windows6.1-kb4555449-x64_92202202c3dee2f713f67adf6622851b998c6780.msu](https://catalog.s.download.windowsupdate.com/c/msdownload/update/software/secu/2020/04/windows6.1-kb4555449-x64_92202202c3dee2f713f67adf6622851b998c6780.msu) | 
+| x86 | KB4575903 - 2020-07 Extended Security Updates (ESU) Licensing Preparation Package for Windows 7 | [windows6.1-kb4575903-x86_5905c774f806205b5d25b04523bb716e1966306d.msu](https://catalog.s.download.windowsupdate.com/d/msdownload/update/software/secu/2020/07/windows6.1-kb4575903-x86_5905c774f806205b5d25b04523bb716e1966306d.msu) |
+| x64 | KB4575903 - 2020-07 Extended Security Updates (ESU) Licensing Preparation Package for Windows 7 | [windows6.1-kb4575903-x64_b4d5cf045a03034201ff108c2802fa6ac79459a1.msu](https://catalog.s.download.windowsupdate.com/d/msdownload/update/software/secu/2020/07/windows6.1-kb4575903-x64_b4d5cf045a03034201ff108c2802fa6ac79459a1.msu) | 
+| x86 | KB5017397 - 2022-09 Servicing Stack Update for Windows 7 | [windows6.1-kb5017397-x86_96b91eb53575a201d59b1a2b540aa15df0d23b3a.msu](https://catalog.s.download.windowsupdate.com/c/msdownload/update/software/secu/2022/09/windows6.1-kb5017397-x86_96b91eb53575a201d59b1a2b540aa15df0d23b3a.msu) |
+| x64 | KB5017397 - 2022-09 Servicing Stack Update for Windows 7 | [windows6.1-kb5017397-x64_2a9999bd20cb964869c59bb16841a76e14030a29.msu](https://catalog.s.download.windowsupdate.com/c/msdownload/update/software/secu/2022/09/windows6.1-kb5017397-x64_2a9999bd20cb964869c59bb16841a76e14030a29.msu) | 
+| x86 | KB5022338 - 2023-01 Security Monthly Quality Rollup for Windows 7 | [windows6.1-kb5022338-x86_490dce532d299588e11abf3790ff1600482525cd.msu](https://catalog.s.download.windowsupdate.com/d/msdownload/update/software/secu/2023/01/windows6.1-kb5022338-x86_490dce532d299588e11abf3790ff1600482525cd.msu) |
+| x64 | KB5022338 - 2023-01 Security Monthly Quality Rollup for Windows 7 | [windows6.1-kb5022338-x64_75d100c03bcaee4b62d08004cc382337ed09d327.msu](https://catalog.s.download.windowsupdate.com/d/msdownload/update/software/secu/2023/01/windows6.1-kb5022338-x64_75d100c03bcaee4b62d08004cc382337ed09d327.msu) | 
