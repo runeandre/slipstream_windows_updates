@@ -29,6 +29,8 @@ Slipstreaming Windows 10 and 11 updates and producing a bootable ISO should also
 	(x64 = 64-bit / x86 = 32-bit)
 
 4. Any files or folders put in the "<b>Copy To ISO</b>" folder will be added to the root of the new Windows ISO file.
+<br>
+<br>For instance, adding this script "...\Copy To ISO\sources\$OEM$\$$\Setup\Scripts\SetupComplete.cmd" in this folder path will give you a script that is auto executed after Windows 7 has been installed. [Read more](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-7/dd744268(v=ws.10))
 5. Script Requirements:
 <br>- Windows with Powershell (made and tested in Windows 11)
 <br>- [DISM](https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/what-is-dism) (Should come with Windows)
