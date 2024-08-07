@@ -14,11 +14,9 @@ Slipstreaming Windows 10 and 11 updates and producing a bootable ISO should also
 2. Get a Windows 7 ISO, put it into the scripts folder (you opened above), and rename the Windows ISO file to "Windows.iso".
 <br>More info below about this.
 3. Download the Windows updates you want to integrate into the Windows ISO.
-<br>
-<br><b>You can use the following scripts to download all the normal Windows 7 updates until January 2020 into the correct folders, use the one that matches your ISOs architecture.</b>
-<br>
-<br><i>The ESU updates until January 2023 can also be downloaded, but slipstreaming isn't supported by default. You will have to do some sort of modifications first, or install manually once Windows 7 is installed to the PC. [Read more](#esu-updates) </i>
-
+	<br><br><b>You can use the following scripts to download all the normal Windows 7 updates until January 2020 into the correct folders, use the one that matches your ISOs architecture.</b>
+	<br><br><i>The ESU updates until January 2023 can also be downloaded, but slipstreaming isn't supported by default. You will have to do some sort of modifications first, or install manually once Windows 7 is installed to the PC. [Read more](#esu-updates) </i><br>
+    
 	| Architecture | Script | Update type |
 	| --- | --- | --- |
 	| <b>x86</b> | <b>[Download Windows 7 Updates x86.bat](https://github.com/runeandre/slipstream_windows_updates/blob/main/Download%20Windows%207%20x86%20Updates.bat)</b> | <b>Normal Updates</b> |
