@@ -1,6 +1,6 @@
 *.exe
 *.iso
 *.txt
-TMP
-Copy To ISO
-Windows 7
+TMP*
+Copy To ISO*
+Windows 7*

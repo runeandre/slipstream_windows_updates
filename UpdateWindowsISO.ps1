@@ -448,8 +448,8 @@ if ($dvd_windows_version -eq $dvd_version_win7 -And [System.IO.File]::Exists($wi
 	dism /mount-wim /wimfile:"$($folder_windows_iso)\sources\$($installFile)" /index:$selection /mountdir:"$($folder_tmp)\mount"
 	
 	$esu_msg_start = "Running the ESU script ""$($win7_esuscript_cmd)""
-- ""install"" file: $($folder_windows_iso)\sources\$($installFile)	
-- ""install"" mount: $($folder_tmp)\mount
+- $($installFile): $($folder_windows_iso)\sources\$($installFile)	
+- Mounted directory: $($folder_tmp)\mount
  "
 	$esu_msg_stop = " 
 Press any key to continue once the ESU script has finished!
