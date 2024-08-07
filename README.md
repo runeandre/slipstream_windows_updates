@@ -14,8 +14,8 @@ Slipstreaming Windows 10 and 11 updates and producing a bootable ISO should also
 2. Get a Windows 7 ISO, put it into the scripts folder (you opened above), and rename the Windows ISO file to "Windows.iso".
 <br>More info below about this.
 3. Download the Windows updates you want to integrate into the Windows ISO.
-	<br><br><b>You can use the following scripts to download all the normal Windows 7 updates until January 2020 into the correct folders, use the one that matches your ISOs architecture.</b>
-	<br><br><i>The ESU updates until January 2023 can also be downloaded, but slipstreaming isn't supported by default. You will have to do some sort of modifications first, or install manually once Windows 7 is installed to the PC. [Read more](#esu-updates) </i><br>
+<br><br><b>You can use the following scripts to download all the normal Windows 7 updates until January 2020 into the correct folders, use the one that matches your ISOs architecture.</b>
+<br><br><i>The ESU updates until January 2023 can also be downloaded, but slipstreaming isn't supported by default. You will have to do some sort of modifications first, or install manually once Windows 7 is installed to the PC. [Read more](#esu-updates) </i><br>
     
 	| Architecture | Script | Update type |
 	| --- | --- | --- |
@@ -26,8 +26,7 @@ Slipstreaming Windows 10 and 11 updates and producing a bootable ISO should also
 	
 	(x64 = 64-bit / x86 = 32-bit)
 
-4. Any files or folders put in the "<b>Copy To ISO</b>" folder will be added to the root of the new Windows ISO file.
-<br>
+4. Any files or folders put in the "<b>Copy To ISO</b>" folder will be added to the root of the new Windows ISO file.<br>
 <br>For instance, adding this script "...\Copy To ISO\sources\$OEM$\$$\Setup\Scripts\SetupComplete.cmd" in this folder path will give you a script that is auto executed after Windows 7 has been installed. [Read more](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-7/dd744268(v=ws.10))
 5. Script Requirements:
 <br>- Windows with Powershell (made and tested in Windows 11)
