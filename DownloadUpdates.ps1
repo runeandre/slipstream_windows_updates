@@ -250,13 +250,13 @@ if ($windows -eq $windows7_x86) {
 	
 	if(-Not (Test-Path -Path "$folder_cwd_windows7_updates")){
 		mkdir "$($folder_cwd_windows7_updates)"
-		
-		mkdir "$($folder_cwd_windows7_updates)\95"
-		mkdir "$($folder_cwd_windows7_updates)\96"
-		mkdir "$($folder_cwd_windows7_updates)\97"
-		mkdir "$($folder_cwd_windows7_updates)\98"
-		mkdir "$($folder_cwd_windows7_updates)\99"
 	}
+
+	mkdir "$($folder_cwd_windows7_updates)\95"
+	mkdir "$($folder_cwd_windows7_updates)\96"
+	mkdir "$($folder_cwd_windows7_updates)\97"
+	mkdir "$($folder_cwd_windows7_updates)\98"
+	mkdir "$($folder_cwd_windows7_updates)\99"
 	
 	Write-Host "Download ESU Updates"
 	Invoke-WebRequest "https://catalog.s.download.windowsupdate.com/c/msdownload/update/software/secu/2020/04/windows6.1-kb4555449-x86_36683b4af68408ed268246ee3e89772665572471.msu" -OutFile "$($folder_cwd_windows7_updates)\95\windows6.1-kb4555449-x86_36683b4af68408ed268246ee3e89772665572471.msu"
@@ -287,13 +287,13 @@ if ($windows -eq $windows7_x86) {
 	
 	if(-Not (Test-Path -Path "$folder_cwd_windows7_updates")){
 		mkdir "$($folder_cwd_windows7_updates)"
-		
-		mkdir "$($folder_cwd_windows7_updates)\95"
-		mkdir "$($folder_cwd_windows7_updates)\96"
-		mkdir "$($folder_cwd_windows7_updates)\97"
-		mkdir "$($folder_cwd_windows7_updates)\98"
-		mkdir "$($folder_cwd_windows7_updates)\99"
 	}
+
+	mkdir "$($folder_cwd_windows7_updates)\95"
+	mkdir "$($folder_cwd_windows7_updates)\96"
+	mkdir "$($folder_cwd_windows7_updates)\97"
+	mkdir "$($folder_cwd_windows7_updates)\98"
+	mkdir "$($folder_cwd_windows7_updates)\99"
 	
 	Write-Host "Download ESU Updates"
 	Invoke-WebRequest "https://catalog.s.download.windowsupdate.com/c/msdownload/update/software/secu/2020/04/windows6.1-kb4555449-x64_92202202c3dee2f713f67adf6622851b998c6780.msu" -OutFile "$($folder_cwd_windows7_updates)\95\windows6.1-kb4555449-x64_92202202c3dee2f713f67adf6622851b998c6780.msu"
