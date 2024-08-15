@@ -8,6 +8,8 @@ Slipstreaming Windows 10 and 11 updates and producing a bootable ISO should also
 
 # Guide
 
+Script runs on Windows 7 and newer (Tested in Windows 7 and 11).
+
 ## Windows 7
 
 1. [Download these scripts](https://github.com/runeandre/slipstream_windows_updates/archive/refs/heads/main.zip), extract the scripts into a folder and open that folder.
@@ -40,6 +42,44 @@ Slipstreaming Windows 10 and 11 updates and producing a bootable ISO should also
 <br>- It checks if Service Pack 1 is already installed on the "Windows.iso" file, and skips adding it if "Windows.iso" already has it integrated.
 
 # Required files
+
+## Windows Vista
+
+You will only need to download the files that matches the architecture of the DVD you choose (x86 or x64).
+<br>The following lists of files will contain both!
+
+### Windows Vista ISOs
+
+You can find copies of your Windows Vista SP1 ISOs etc on [archive.org](https://archive.org/search?query=windows+vista+sp1) and other places if you need one.
+
+### Service Pack 1 (Doesn't work yet)
+
+I would advice using Windows Vista ISOs with Service Pack 1 already slipstreamed!
+<br>I have implemented code should have been able to slipstream SP1, but doesn't work currently.
+
+<b>The main problem seems to be adding "windows6.0-kb936330-X....cab", found in the "Service Pack 1 Standalone (KB936330)" file, onto the "install.wim" image on the Windows Vista ISO.</b>
+
+| Architecture | Name | Filename / Link | 
+| --- | --- | --- | 
+| x86 | KB935509 - Update for Windows Vista | [windows6.0-kb935509-x86_083aa7934c3567ea6c2462a49c1ce4e5c2abe6a9.msu](https://catalog.s.download.windowsupdate.com/msdownload/update/software/crup/2008/01/windows6.0-kb935509-x86_083aa7934c3567ea6c2462a49c1ce4e5c2abe6a9.msu) |
+| x86 | KB937287 - Update for Windows Vista | [windows6.0-kb937287-x86_7c743a8b417d643dbe07eaa1c645be21ff8ae068.msu](https://catalog.s.download.windowsupdate.com/msdownload/update/software/crup/2008/02/windows6.0-kb937287-x86_7c743a8b417d643dbe07eaa1c645be21ff8ae068.msu) |
+| x86 | KB938371 - Update for Windows Vista | [windows6.0-kb938371-v2-x86_64465f21711c8fa12d5671d79363a72e43babafd.msu](https://catalog.s.download.windowsupdate.com/msdownload/update/software/crup/2008/03/windows6.0-kb938371-v2-x86_64465f21711c8fa12d5671d79363a72e43babafd.msu) |
+| x86 | KB949939 - Update for Windows Vista | [windows6.0-kb949939-x86_b4a77f7f20405bd714b5fcf8ddb1ffed6095814d.msu](https://catalog.s.download.windowsupdate.com/msdownload/update/software/crup/2008/03/windows6.0-kb949939-x86_b4a77f7f20405bd714b5fcf8ddb1ffed6095814d.msu) |
+| x86 | KB936330 - Service Pack 1 Standalone | [windows6.0-kb936330-x86_b8a3fa8f819269e37d8acde799e7a9aea3dd4529.exe](https://catalog.s.download.windowsupdate.com/msdownload/update/software/svpk/2008/04/windows6.0-kb936330-x86_b8a3fa8f819269e37d8acde799e7a9aea3dd4529.exe) |
+| x64 | KB935509 - Update for Windows Vista | [windows6.0-kb935509-x64_d5cc6a8c1a83b2d75b3df49fab1a70be044beb16.msu](https://catalog.s.download.windowsupdate.com/msdownload/update/software/crup/2008/01/windows6.0-kb935509-x64_d5cc6a8c1a83b2d75b3df49fab1a70be044beb16.msu) |
+| x64 | KB937287 - Update for Windows Vista | [windows6.0-kb937287-x64_3387382c1226f026497318cf975188647031fcc8.msu](https://catalog.s.download.windowsupdate.com/msdownload/update/software/crup/2008/02/windows6.0-kb937287-x64_3387382c1226f026497318cf975188647031fcc8.msu) |
+| x64 | KB938371 - Update for Windows Vista | [windows6.0-kb938371-v2-x64_d4df75be66d34595c060f86737479c4b0f220163.msu](https://catalog.s.download.windowsupdate.com/msdownload/update/software/crup/2008/04/windows6.0-kb938371-v2-x64_d4df75be66d34595c060f86737479c4b0f220163.msu) |
+| x64 | KB949939 - Update for Windows Vista | [windows6.0-kb949939-x64_194ca4626786f1928187c079586c2103ea0eb662.msu](https://catalog.s.download.windowsupdate.com/msdownload/update/software/crup/2008/03/windows6.0-kb949939-x64_194ca4626786f1928187c079586c2103ea0eb662.msu) |
+| x64 | KB936330 - Service Pack 1 Standalone | [windows6.0-kb936330-x64_12eed6cf0a842ce2a609c622b843afc289a8f4b9.exe](https://catalog.s.download.windowsupdate.com/msdownload/update/software/svpk/2008/04/windows6.0-kb936330-x64_12eed6cf0a842ce2a609c622b843afc289a8f4b9.exe) |
+
+### Service Pack 2
+
+| Architecture | Name | Filename / Link | 
+| --- | --- | --- | 
+| x86 | KB955430 - Update for Windows Vista | [windows6.0-kb955430-x86_e9932d9bb9a71e65f19973e14636ac04e988e7b2.msu](https://catalog.s.download.windowsupdate.com/msdownload/update/software/crup/2009/04/windows6.0-kb955430-x86_e9932d9bb9a71e65f19973e14636ac04e988e7b2.msu) |
+| x86 | KB948465 - Service Pack 2 Standalone | [windows6.0-kb948465-x86_55f17352b4398ecb4f0cc20e3737631420ca1609.exe](https://catalog.s.download.windowsupdate.com/msdownload/update/software/svpk/2009/06/windows6.0-kb948465-x86_55f17352b4398ecb4f0cc20e3737631420ca1609.exe) |
+| x64 | KB955430 - Update for Windows Vista | [windows6.0-kb955430-x64_e685e41a6f9abdb982730ece83a6d4bf9f0908df.msu](https://catalog.s.download.windowsupdate.com/msdownload/update/software/crup/2009/04/windows6.0-kb955430-x64_e685e41a6f9abdb982730ece83a6d4bf9f0908df.msu) |
+| x64 | KB948465 - Service Pack 2 Standalone | [windows6.0-kb948465-x64_2eedca0bfa5ae8d1b0acf2117ddc4f15ac5183c9.exe](https://catalog.s.download.windowsupdate.com/msdownload/update/software/svpk/2009/06/windows6.0-kb948465-x64_2eedca0bfa5ae8d1b0acf2117ddc4f15ac5183c9.exe) |
 
 ## Windows 7
 

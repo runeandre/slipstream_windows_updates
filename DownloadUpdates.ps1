@@ -16,10 +16,18 @@ Write-Host " "
 ### Settings ###
 ################
 $windows = "$($env:windows)"
+$windows_vista_x86 = "windowsvistax86"
+$windows_vista_x64 = "windowsvistax64"
 $windows7_x86 = "windows7x86"
 $windows7_x64 = "windows7x64"
 $windows7_x86_esu = "windows7x86_esu"
 $windows7_x64_esu = "windows7x64_esu"
+
+# Windows Vista
+$folder_cwd_windows_vista = "$($PWD)\Windows Vista"
+$folder_cwd_windows_vista_updates = "$($folder_cwd_windows_vista)\Updates"
+$folder_cwd_windows_vista_sp1 = "$($folder_cwd_windows_vista)\Service Pack 1"
+$folder_cwd_windows_vista_sp2 = "$($folder_cwd_windows_vista)\Service Pack 2"
 
 # Windows 7
 $folder_cwd_windows7 = "$($PWD)\Windows 7"
@@ -27,8 +35,97 @@ $folder_cwd_windows7_updates = "$($folder_cwd_windows7)\Updates"
 $folder_cwd_windows7_sp1 = "$($folder_cwd_windows7)\Service Pack 1"
 $folder_cwd_windows7_ie11 = "$($folder_cwd_windows7)\Internet Explorer 11"
 
+if ($windows -eq $windows_vista_x86) {
+	Write-Host " "
+	Write-Host "Download Windows Vista x86 Updates"
+	if(Test-Path -Path "$folder_cwd_windows_vista"){
+		$folder_cwd_windows_vista_new_name = "$($folder_cwd_windows_vista)_$(([TimeSpan] (Get-Date).ToLongTimeString()).TotalMilliseconds)"
+		
+		Write-Host " "
+		Write-Host "The folder ""$folder_cwd_windows_vista"" already exists!"
+		Write-Host "Renaming it from ""$folder_cwd_windows_vista"" to ""$($folder_cwd_windows_vista_new_name)""."
+		
+		Rename-Item -Path "$folder_cwd_windows_vista" -NewName "$($folder_cwd_windows_vista_new_name)"
 
-if ($windows -eq $windows7_x86) {
+		mkdir "$($folder_cwd_windows_vista)"
+	}else{
+		mkdir "$($folder_cwd_windows_vista)"
+	}
+
+	if(-Not (Test-Path -Path "$folder_cwd_windows_vista_updates")){
+		mkdir "$($folder_cwd_windows_vista_updates)"
+	}
+
+	if(-Not (Test-Path -Path "$folder_cwd_windows_vista_sp1")){
+		mkdir "$($folder_cwd_windows_vista_sp1)"
+
+		mkdir "$($folder_cwd_windows_vista_sp1)\01"
+		mkdir "$($folder_cwd_windows_vista_sp1)\02"
+	}
+
+	if(-Not (Test-Path -Path "$folder_cwd_windows_vista_sp2")){
+		mkdir "$($folder_cwd_windows_vista_sp2)"
+
+		mkdir "$($folder_cwd_windows_vista_sp2)\01"
+		mkdir "$($folder_cwd_windows_vista_sp2)\02"
+	}
+
+	# Service Pack 1
+	Invoke-WebRequest "https://catalog.s.download.windowsupdate.com/msdownload/update/software/crup/2008/01/windows6.0-kb935509-x86_083aa7934c3567ea6c2462a49c1ce4e5c2abe6a9.msu" -OutFile "$($folder_cwd_windows_vista_sp1)\01\windows6.0-kb935509-x86_083aa7934c3567ea6c2462a49c1ce4e5c2abe6a9.msu"
+	Invoke-WebRequest "https://catalog.s.download.windowsupdate.com/msdownload/update/software/crup/2008/02/windows6.0-kb937287-x86_7c743a8b417d643dbe07eaa1c645be21ff8ae068.msu" -OutFile "$($folder_cwd_windows_vista_sp1)\01\windows6.0-kb937287-x86_7c743a8b417d643dbe07eaa1c645be21ff8ae068.msu"
+	Invoke-WebRequest "https://catalog.s.download.windowsupdate.com/msdownload/update/software/crup/2008/03/windows6.0-kb938371-v2-x86_64465f21711c8fa12d5671d79363a72e43babafd.msu" -OutFile "$($folder_cwd_windows_vista_sp1)\01\windows6.0-kb938371-v2-x86_64465f21711c8fa12d5671d79363a72e43babafd.msu"
+	Invoke-WebRequest "https://catalog.s.download.windowsupdate.com/msdownload/update/software/crup/2008/03/windows6.0-kb949939-x86_b4a77f7f20405bd714b5fcf8ddb1ffed6095814d.msu" -OutFile "$($folder_cwd_windows_vista_sp1)\01\windows6.0-kb949939-x86_b4a77f7f20405bd714b5fcf8ddb1ffed6095814d.msu"
+	Invoke-WebRequest "https://catalog.s.download.windowsupdate.com/msdownload/update/software/svpk/2008/04/windows6.0-kb936330-x86_b8a3fa8f819269e37d8acde799e7a9aea3dd4529.exe" -OutFile "$($folder_cwd_windows_vista_sp1)\02\windows6.0-kb936330-x86_b8a3fa8f819269e37d8acde799e7a9aea3dd4529.exe"
+	
+	# Service Pack 2
+	Invoke-WebRequest "https://catalog.s.download.windowsupdate.com/msdownload/update/software/crup/2009/04/windows6.0-kb955430-x86_e9932d9bb9a71e65f19973e14636ac04e988e7b2.msu" -OutFile "$($folder_cwd_windows_vista_sp2)\01\windows6.0-kb955430-x86_e9932d9bb9a71e65f19973e14636ac04e988e7b2.msu"
+	Invoke-WebRequest "https://catalog.s.download.windowsupdate.com/msdownload/update/software/svpk/2009/06/windows6.0-kb948465-x86_55f17352b4398ecb4f0cc20e3737631420ca1609.exe" -OutFile "$($folder_cwd_windows_vista_sp2)\02\windows6.0-kb948465-x86_55f17352b4398ecb4f0cc20e3737631420ca1609.exe"
+} elseif ($windows -eq $windows_vista_x64) {
+	Write-Host " "
+	Write-Host "Download Windows Vista x64 Updates"
+	if(Test-Path -Path "$folder_cwd_windows_vista"){
+		$folder_cwd_windows_vista_new_name = "$($folder_cwd_windows_vista)_$(([TimeSpan] (Get-Date).ToLongTimeString()).TotalMilliseconds)"
+		
+		Write-Host " "
+		Write-Host "The folder ""$folder_cwd_windows_vista"" already exists!"
+		Write-Host "Renaming it from ""$folder_cwd_windows_vista"" to ""$($folder_cwd_windows_vista_new_name)""."
+		
+		Rename-Item -Path "$folder_cwd_windows_vista" -NewName "$($folder_cwd_windows_vista_new_name)"
+
+		mkdir "$($folder_cwd_windows_vista)"
+	}else{
+		mkdir "$($folder_cwd_windows_vista)"
+	}
+
+	if(-Not (Test-Path -Path "$folder_cwd_windows_vista_updates")){
+		mkdir "$($folder_cwd_windows_vista_updates)"
+	}
+
+	if(-Not (Test-Path -Path "$folder_cwd_windows_vista_sp1")){
+		mkdir "$($folder_cwd_windows_vista_sp1)"
+
+		mkdir "$($folder_cwd_windows_vista_sp1)\01"
+		mkdir "$($folder_cwd_windows_vista_sp1)\02"
+	}
+
+	if(-Not (Test-Path -Path "$folder_cwd_windows_vista_sp2")){
+		mkdir "$($folder_cwd_windows_vista_sp2)"
+
+		mkdir "$($folder_cwd_windows_vista_sp2)\01"
+		mkdir "$($folder_cwd_windows_vista_sp2)\02"
+	}
+
+	# Service Pack 1
+	Invoke-WebRequest "https://catalog.s.download.windowsupdate.com/msdownload/update/software/crup/2008/01/windows6.0-kb935509-x64_d5cc6a8c1a83b2d75b3df49fab1a70be044beb16.msu" -OutFile "$($folder_cwd_windows_vista_sp1)\01\windows6.0-kb935509-x64_d5cc6a8c1a83b2d75b3df49fab1a70be044beb16.msu"
+	Invoke-WebRequest "https://catalog.s.download.windowsupdate.com/msdownload/update/software/crup/2008/02/windows6.0-kb937287-x64_3387382c1226f026497318cf975188647031fcc8.msu" -OutFile "$($folder_cwd_windows_vista_sp1)\01\windows6.0-kb937287-x64_3387382c1226f026497318cf975188647031fcc8.msu"
+	Invoke-WebRequest "https://catalog.s.download.windowsupdate.com/msdownload/update/software/crup/2008/04/windows6.0-kb938371-v2-x64_d4df75be66d34595c060f86737479c4b0f220163.msu" -OutFile "$($folder_cwd_windows_vista_sp1)\01\windows6.0-kb938371-v2-x64_d4df75be66d34595c060f86737479c4b0f220163.msu"
+	Invoke-WebRequest "https://catalog.s.download.windowsupdate.com/msdownload/update/software/crup/2008/03/windows6.0-kb949939-x64_194ca4626786f1928187c079586c2103ea0eb662.msu" -OutFile "$($folder_cwd_windows_vista_sp1)\01\windows6.0-kb949939-x64_194ca4626786f1928187c079586c2103ea0eb662.msu"
+	Invoke-WebRequest "https://catalog.s.download.windowsupdate.com/msdownload/update/software/svpk/2008/04/windows6.0-kb936330-x64_12eed6cf0a842ce2a609c622b843afc289a8f4b9.exe" -OutFile "$($folder_cwd_windows_vista_sp1)\02\windows6.0-kb936330-x64_12eed6cf0a842ce2a609c622b843afc289a8f4b9.exe"
+	
+	# Service Pack 2
+	Invoke-WebRequest "https://catalog.s.download.windowsupdate.com/msdownload/update/software/crup/2009/04/windows6.0-kb955430-x64_e685e41a6f9abdb982730ece83a6d4bf9f0908df.msu" -OutFile "$($folder_cwd_windows_vista_sp2)\01\windows6.0-kb955430-x64_e685e41a6f9abdb982730ece83a6d4bf9f0908df.msu"
+	Invoke-WebRequest "https://catalog.s.download.windowsupdate.com/msdownload/update/software/svpk/2009/06/windows6.0-kb948465-x64_2eedca0bfa5ae8d1b0acf2117ddc4f15ac5183c9.exe" -OutFile "$($folder_cwd_windows_vista_sp2)\02\windows6.0-kb948465-x64_2eedca0bfa5ae8d1b0acf2117ddc4f15ac5183c9.exe"
+} elseif ($windows -eq $windows7_x86) {
 	Write-Host " "
 	Write-Host "Download Windows 7 x86 Updates"
 	if(Test-Path -Path "$folder_cwd_windows7"){

@@ -7,7 +7,6 @@ rem Set the current directory to be the one we run the scripts from
 SET currentDir=%~dp0
 cd /d %currentDir%
 
-rem Split the ISO file
 set windows=windows7x86
 
 rem Start the DownloadUpdates script in PowerShell

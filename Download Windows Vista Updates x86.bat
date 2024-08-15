@@ -7,7 +7,7 @@ rem Set the current directory to be the one we run the scripts from
 SET currentDir=%~dp0
 cd /d %currentDir%
 
-set windows=windows7x86_esu
+set windows=windowsvistax86
 
 rem Start the DownloadUpdates script in PowerShell
 powershell -f DownloadUpdates.ps1
