@@ -227,6 +227,7 @@ function Mount-Wim {
 }
 
 function Unmount-Image-Commit {
+	Write-Host " "
 	Write-Host "Unmount ""$($folder_tmp)\mount"" and commit"
 	if ($windows8_or_higher) {
 		dism /unmount-image /mountdir:"$($folder_tmp)\mount" /commit
@@ -236,6 +237,7 @@ function Unmount-Image-Commit {
 }
 
 function Unmount-Image-Discard-Cleanup {
+	Write-Host " "
 	Write-Host "Unmount ""$($folder_tmp)\mount"" and discard. Cleanup wim"
 	if ($windows8_or_higher) {
 		dism /unmount-image /mountdir:"$($folder_tmp)\mount" /discard
@@ -494,6 +496,9 @@ if ($dvd_architecture -eq "x64") {
 ### File and folder operations ###
 ##################################
 
+### Unmount WIM images
+Unmount-Image-Discard-Cleanup
+
 ### Delete old files and folders
 Write-Host " "
 Write-Host "Delete old files and folders. (This can take a while due to many small files!)"
@@ -505,32 +510,16 @@ if(Test-Path -Path "$($folder_tmp)"){
 ### Delete old ISOs with the version in the name
 Remove-Item "$($PWD)\$($dvd_target_name)" -Force -Confirm:$false -ErrorAction SilentlyContinue
 
-# Has tmp been deleted, if not, try harder
-# This might been required if the script was aborted, and wims not unmounted properly.
 if(Test-Path -Path "$($folder_tmp)"){
 	Write-Host " "
-	Write-Host """$($folder_tmp)"" was not removed, let's try again after running ""dism /unmount-image /mountdir:""$($folder_tmp)\mount"" /discard"" and ""dism /cleanup-wim"""
+	Write-Host "################################################################################"
+	Write-Host """$($folder_tmp)"" not removed! Please help! Maybe restart the PC and try again?"
+	Write-Host "Maybe you need to close a terminal or something that is open in the tmp folder? "
+	Write-Host "You can try running the command ""dism /cleanup-wim"" as an admin."
+	Write-Host "################################################################################"
 	Write-Host " "
 	
-	# Unmount and cleanup
-	Unmount-Image-Discard-Cleanup
-	
-	if(Test-Path -Path "$($folder_tmp)"){
-		attrib -r -h "$($folder_tmp)" /s /d
-		Remove-Item "$($folder_tmp)" -Recurse -Force -Confirm:$false -ErrorAction SilentlyContinue
-	}
-	
-	if(Test-Path -Path "$($folder_tmp)"){
-		Write-Host " "
-		Write-Host "################################################################################"
-		Write-Host """$($folder_tmp)"" not removed! Please help! Maybe restart the PC and try again?"
-		Write-Host "Maybe you need to close a terminal or something that is open in the tmp folder? "
-		Write-Host "You can try running the command ""dism /cleanup-wim"" as an admin."
-		Write-Host "################################################################################"
-		Write-Host " "
-		
-		Exit
-	}
+	Exit
 }
 
 ### Create folders
@@ -887,6 +876,9 @@ if ($dvd_windows_version -eq $dvd_version_win7 -And [System.IO.File]::Exists("$(
 ### Update Windows ###
 ######################
 
+# Mount install.wim
+Mount-Wim
+
 ### Windows Vista Service Pack 1 ###
 # Install Service Pack 1 if it's Windows 7, has Service Pack Level 0 and the service pack file exists
 if ($dvd_windows_version -eq $dvd_version_win_vista -And ($dvd_servicepack_level -eq "0" -Or $dvd_servicepack_level -eq "<undefined>") -And [System.IO.File]::Exists("$($folder_cwd_windows_vista_sp1)\$($win_vista_sp1_exe)")) {
@@ -949,9 +941,6 @@ if ($dvd_windows_version -eq $dvd_version_win_vista -And ($dvd_servicepack_level
 		Write-Host " "
 		Write-Host "Finished installing Windows AIK (assuming you completed it)."
 	}
-	
-	# Mount
-	Mount-Wim
 
 	Write-Host " "
 	Write-Host "Install Windows Vista SP1 Prerequisites"
@@ -1000,9 +989,6 @@ if ($dvd_windows_version -eq $dvd_version_win_vista -And ($dvd_servicepack_level
 	Write-Host "The command: Start-Process ""$($pkgmgr)"" -ArgumentList @(""/ip /m:`"$($folder_tmp)\Updated_$($win_vista_sp1_cab)`" /o:`"$($folder_tmp)\mount;$($folder_tmp)\mount\Windows`" /s:`"$($sandbox)`""") -NoNewWindow -Wait"
 	Start-Process "$($pkgmgr)" -ArgumentList @("/ip /m:`"$($folder_tmp)\Updated_$($win_vista_sp1_cab)`" /o:`"$($folder_tmp)\mount;$($folder_tmp)\mount\Windows`" /s:`"$($sandbox)`"") -NoNewWindow -Wait
 	Remove-Item "`"$($sandbox)\*`"" -Force -Confirm:$false -ErrorAction SilentlyContinue
-
-	# Unmount
-	Unmount-Image-Commit
 	
 	# Sources: 
 	# - https://davestechnology.blogspot.com/2014/06/manually-install-msu-or-cab-files.html
@@ -1014,9 +1000,6 @@ if ($dvd_windows_version -eq $dvd_version_win_vista -And ($dvd_servicepack_level
 ### Windows 7 Service Pack 1 ###
 # Install Service Pack 1 if it's Windows 7, has Service Pack Level 0 and the service pack file exists
 if ($dvd_windows_version -eq $dvd_version_win7 -And $dvd_servicepack_level -eq "0" -And [System.IO.File]::Exists("$($folder_cwd_windows7_sp1)\$($win7_sp1_exe)")) {
-	# Mount
-	Mount-Wim
-
 	Write-Host " "
 	Write-Host "Update ""$($folder_tmp)\mount"" with the update ""$($folder_cwd_windows7_sp1)\$($win7_pre_sp1)"""
 	Dism /Image:"$($folder_tmp)\mount" /Add-Package /PackagePath:"$($folder_cwd_windows7_sp1)\$($win7_pre_sp1)"
@@ -1024,9 +1007,6 @@ if ($dvd_windows_version -eq $dvd_version_win7 -And $dvd_servicepack_level -eq "
 	Write-Host " "
 	Write-Host "Update ""$($folder_tmp)\mount"" with the updates from ""$($folder_tmp_windows7_sp1)"" (This can take a while!!!)"
 	Dism /Image:"$($folder_tmp)\mount" /Add-Package /PackagePath:"$($folder_tmp_windows7_sp1)"
-
-	# Unmount
-	Unmount-Image-Commit
 }
 
 
@@ -1042,48 +1022,27 @@ if ($dvd_windows_version -eq $dvd_version_win_vista) {
 	Get-ChildItem -Directory -Path "$($folder_cwd_windows7_updates)" | ForEach-Object {
 		# Check that update folder is not empty
 		if (Test-Path "$($_.FullName)\*") {
-			# Mount
-			Mount-Wim
-			
 			Write-Host " "
 			Write-Host "Slipstream updates in the subfolder ""$($_.FullName)"" (This can take a while!!! Ignore missmatch errors!)"
 			Write-Host "Dism /Image:""$($folder_tmp)\mount"" /Add-Package /PackagePath:""$($_.FullName)"""
 			Dism /Image:"$($folder_tmp)\mount" /Add-Package /PackagePath:"$($_.FullName)"
-			
-			# Unmount
-			Unmount-Image-Commit
 		}
 	}
 	
 	# Updates - Root folder
 	if (Test-Path "$($folder_cwd_windows7_updates)\*") {
-		# Mount
-		Mount-Wim
-		
 		Write-Host " "
 		Write-Host "Slipstream updates (This can take a while!!! Ignore missmatch errors!)"
 		Write-Host "Dism /Image:""$($folder_tmp)\mount"" /Add-Package /PackagePath:""$($folder_cwd_windows7_updates)"""
 		Dism /Image:"$($folder_tmp)\mount" /Add-Package /PackagePath:"$($folder_cwd_windows7_updates)"
-		
-		# Unmount
-		Unmount-Image-Commit
 	}
 	
 	# Internet Explorer 11
 	if (Test-Path "$($folder_cwd_windows7_ie11)\*") {
-		# Mount
-		Mount-Wim
-		
 		Write-Host " "
 		Write-Host "Slipstream Internet Explorer 11 Prerequisites"
 		Write-Host "Dism /Image:""$($folder_tmp)\mount"" /Add-Package /PackagePath:""$($folder_cwd_windows7_ie11)"""
 		Dism /Image:"$($folder_tmp)\mount" /Add-Package /PackagePath:"$($folder_cwd_windows7_ie11)"
-		
-		# Unmount
-		Unmount-Image-Commit
-		
-		# Mount
-		Mount-Wim
 		
 		Write-Host " "
 		Write-Host "Slipstream Internet Explorer 11"
@@ -1099,43 +1058,30 @@ if ($dvd_windows_version -eq $dvd_version_win_vista) {
 		
 		Write-Host "Dism /Image:""$($folder_tmp)\mount"" /Add-Package /PackagePath:""$($folder_tmp_windows7_ie11)\$($win7_ie11_iewin7)"""
 		Dism /Image:"$($folder_tmp)\mount" /Add-Package /PackagePath:"$($folder_tmp_windows7_ie11)\$($win7_ie11_iewin7)"
-		
-		# Unmount
-		Unmount-Image-Commit
 	}
 } else {
 	# All other versions of Windows
 	Get-ChildItem -Directory -Path "$($folder_cwd_windows_updates)" | ForEach-Object {
 		# Check that update folder is not empty
 		if (Test-Path "$($_.FullName)\*") {
-			# Mount
-			Mount-Wim
-			
 			Write-Host " "
 			Write-Host "Slipstream updates in the subfolder ""$($_.FullName)"" (This can take a while!!! Ignore missmatch errors!)"
 			Write-Host "Dism /Image:""$($folder_tmp)\mount"" /Add-Package /PackagePath:""$($_.FullName)"""
 			Dism /Image:"$($folder_tmp)\mount" /Add-Package /PackagePath:"$($_.FullName)"
-			
-			# Unmount
-			Unmount-Image-Commit
 		}
 	}
 	
 	# Check that update folder is not empty
 	if (Test-Path "$($folder_cwd_windows_updates)\*") {
-		# Mount
-		Mount-Wim
-		
 		Write-Host " "
 		Write-Host "Slipstream updates (This can take a while!!! Ignore missmatch errors!)"
 		Write-Host "Dism /Image:""$($folder_tmp)\mount"" /Add-Package /PackagePath:""$($folder_cwd_windows_updates)"""
 		Dism /Image:"$($folder_tmp)\mount" /Add-Package /PackagePath:"$($folder_cwd_windows_updates)"
-		
-		# Unmount
-		Unmount-Image-Commit
 	}
 }
 
+# Unmount and commit changes to install.wim
+Unmount-Image-Commit
 
 ###################
 ### Create ISOs ###
