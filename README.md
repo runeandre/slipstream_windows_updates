@@ -302,3 +302,11 @@ Updates WSUS offline updater wants to install after all the others have been ins
 | x64 | KB4578623 - 2020-10 Update for Windows 7 | [windows6.1-kb4578623-x64_dcbc342c60cc1c6c4ca8559430008a8191e64455.msu](https://catalog.s.download.windowsupdate.com/d/msdownload/update/software/uprl/2020/10/windows6.1-kb4578623-x64_dcbc342c60cc1c6c4ca8559430008a8191e64455.msu) |
 | x86 | KB4601275 - 2021-04 Update for Windows 7 | [windows6.1-kb4601275-x86_8f127a2ce3fa65c11f3824998e95da4d211f100c.msu](https://catalog.s.download.windowsupdate.com/d/msdownload/update/software/uprl/2021/04/windows6.1-kb4601275-x86_8f127a2ce3fa65c11f3824998e95da4d211f100c.msu) |
 | x64 | KB4601275 - 2021-04 Update for Windows 7 | [windows6.1-kb4601275-x64_00d4557308ead569110ca3455205375984afde76.msu](https://catalog.s.download.windowsupdate.com/d/msdownload/update/software/uprl/2021/04/windows6.1-kb4601275-x64_00d4557308ead569110ca3455205375984afde76.msu) |
+
+# Enable running scripts!
+
+In order to run Powershell scripts, run the file [Set-ExecutionPolicy Unrestricted.bat](https://github.com/runeandre/slipstream_windows_updates/tree/main/Set-ExecutionPolicy/Set-ExecutionPolicy%20Unrestricted.bat)
+
+Or run the powershell command "Set-ExecutionPolicy Unrestricted".
+
+You can revert to default settings with "Set-ExecutionPolicy Default" and "Set-ExecutionPolicy Default All" for all scopes.
