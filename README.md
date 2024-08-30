@@ -1,4 +1,4 @@
-# Update Windows.iso with Windows Updates (Mainly Windows 7)
+# Update Windows.iso with Windows Updates (Mainly Windows Vista and 7)
 
 This script was made firstly with Windows 7 in mind, and is what I have tested it with.
 
@@ -9,6 +9,35 @@ Slipstreaming Windows 10 and 11 updates and producing a bootable ISO should also
 # Guide
 
 Script runs on Windows 7 and newer (Tested in Windows 7 and 11).
+
+## Windows Vista
+
+1. [Download these scripts](https://github.com/runeandre/slipstream_windows_updates/archive/refs/heads/main.zip), extract the scripts into a folder and open that folder.
+2. Get a Windows Vista ISO, put it into the scripts folder (you opened above), and rename the Windows ISO file to "Windows.iso".
+<br>More info below about this.
+3. Download the Windows updates (Service Pack 1 & 2 atm!) you want to integrate into the Windows ISO.
+    
+	| Architecture | Script | Update type |
+	| --- | --- | --- |
+	| <b>x86</b> | <b>[Download Windows Vista Updates x86.bat](https://github.com/runeandre/slipstream_windows_updates/blob/main/Download%20Windows%20Vista%20x86%20Updates.bat)</b> | <b>Normal Updates</b> |
+	| <b>x64</b> | <b>[Download Windows Vista Updates x64.bat](https://github.com/runeandre/slipstream_windows_updates/blob/main/Download%20Windows%20Vista%20x64%20Updates.bat)</b> | <b>Normal Updates</b> |
+	
+	(x64 = 64-bit / x86 = 32-bit)
+
+4. Any files or folders put in the "<b>Copy To ISO</b>" folder will be added to the root of the new Windows ISO file.<br>
+<br>For instance, adding this script "...\Copy To ISO\sources\$OEM$\$$\Setup\Scripts\SetupComplete.cmd" in this folder path will give you a script that is auto executed after Windows 7 has been installed. [Read more](https://learn.microsoft.com/en-us/previous-versions/windows/it-pro/windows-7/dd744268(v=ws.10))
+5. Script Requirements:
+<br>- Windows with Powershell (made and tested in Windows 11)
+<br>- [DISM](https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/what-is-dism) (Should come with Windows)
+<br>- [Oscdimg](https://learn.microsoft.com/en-us/windows-hardware/manufacture/desktop/oscdimg-command-line-options) (Auto installed by the script if missing)
+<br>- [7zip](https://www.7-zip.org/) (Auto installed by the script if missing)
+<br>- [Windows AIK](https://download.microsoft.com/download/9/c/d/9cdfa30e-5901-40e4-b6bf-4a0086ea0a6a/6001.18000.080118-1840-kb3aikl_en.iso) (Auto installed by the script if missing)
+<br>- [QEMU](https://www.qemu.org/ (Auto installed by the script if missing)
+<br>- Enough free HDD space
+<br>- Enough time!!! (the script can take multiple hours to complete)
+6. Run the "<b>Update ISO.bat</b>" to create a updated Windows 7 ISO file.
+<br>- The "Windows.iso" file is NOT updated.
+<br>- A new Windows ISO file is created, and the filename is specified when the script is finished.
 
 ## Windows 7
 
@@ -52,33 +81,29 @@ You will only need to download the files that matches the architecture of the DV
 
 You can find copies of your Windows Vista SP1 ISOs etc on [archive.org](https://archive.org/search?query=windows+vista+sp1) and other places if you need one.
 
-### Service Pack 1 (Doesn't work yet)
+This script has mainly been tested with the Windows Vista x64 RTM DVD "en_windows_vista_x64_dvd_X12-40712.iso".
 
-I would advice using Windows Vista ISOs with Service Pack 1 already slipstreamed!
-<br>I have implemented code should have been able to slipstream SP1, but doesn't work currently.
+### Service Pack 1 and 2
 
-<b>The main problem seems to be adding "windows6.0-kb936330-X....cab", found in the "Service Pack 1 Standalone (KB936330)" file, onto the "install.wim" image on the Windows Vista ISO.</b>
+<b>Integrating the two service packs takes a long time (hours).</b>
+<br>The service packs are installed via a virtual machine (Qemu), and then an updated Windows image is created based on that.
+
+Using official Windows Vista ISOs with Service Pack 2 already slipstreamed is not a bad idea if possible!
+<br>But that might not be an option with OEM specific Windows versions for instance.
+<br>In that case then this script is an option, there are also other options like vLite (commercial product).
+
+#### Service Pack 1
 
 | Architecture | Name | Filename / Link | 
 | --- | --- | --- | 
-| x86 | KB935509 - Update for Windows Vista | [windows6.0-kb935509-x86_083aa7934c3567ea6c2462a49c1ce4e5c2abe6a9.msu](https://catalog.s.download.windowsupdate.com/msdownload/update/software/crup/2008/01/windows6.0-kb935509-x86_083aa7934c3567ea6c2462a49c1ce4e5c2abe6a9.msu) |
-| x86 | KB937287 - Update for Windows Vista | [windows6.0-kb937287-x86_7c743a8b417d643dbe07eaa1c645be21ff8ae068.msu](https://catalog.s.download.windowsupdate.com/msdownload/update/software/crup/2008/02/windows6.0-kb937287-x86_7c743a8b417d643dbe07eaa1c645be21ff8ae068.msu) |
-| x86 | KB938371 - Update for Windows Vista | [windows6.0-kb938371-v2-x86_64465f21711c8fa12d5671d79363a72e43babafd.msu](https://catalog.s.download.windowsupdate.com/msdownload/update/software/crup/2008/03/windows6.0-kb938371-v2-x86_64465f21711c8fa12d5671d79363a72e43babafd.msu) |
-| x86 | KB949939 - Update for Windows Vista | [windows6.0-kb949939-x86_b4a77f7f20405bd714b5fcf8ddb1ffed6095814d.msu](https://catalog.s.download.windowsupdate.com/msdownload/update/software/crup/2008/03/windows6.0-kb949939-x86_b4a77f7f20405bd714b5fcf8ddb1ffed6095814d.msu) |
 | x86 | KB936330 - Service Pack 1 Standalone | [windows6.0-kb936330-x86_b8a3fa8f819269e37d8acde799e7a9aea3dd4529.exe](https://catalog.s.download.windowsupdate.com/msdownload/update/software/svpk/2008/04/windows6.0-kb936330-x86_b8a3fa8f819269e37d8acde799e7a9aea3dd4529.exe) |
-| x64 | KB935509 - Update for Windows Vista | [windows6.0-kb935509-x64_d5cc6a8c1a83b2d75b3df49fab1a70be044beb16.msu](https://catalog.s.download.windowsupdate.com/msdownload/update/software/crup/2008/01/windows6.0-kb935509-x64_d5cc6a8c1a83b2d75b3df49fab1a70be044beb16.msu) |
-| x64 | KB937287 - Update for Windows Vista | [windows6.0-kb937287-x64_3387382c1226f026497318cf975188647031fcc8.msu](https://catalog.s.download.windowsupdate.com/msdownload/update/software/crup/2008/02/windows6.0-kb937287-x64_3387382c1226f026497318cf975188647031fcc8.msu) |
-| x64 | KB938371 - Update for Windows Vista | [windows6.0-kb938371-v2-x64_d4df75be66d34595c060f86737479c4b0f220163.msu](https://catalog.s.download.windowsupdate.com/msdownload/update/software/crup/2008/04/windows6.0-kb938371-v2-x64_d4df75be66d34595c060f86737479c4b0f220163.msu) |
-| x64 | KB949939 - Update for Windows Vista | [windows6.0-kb949939-x64_194ca4626786f1928187c079586c2103ea0eb662.msu](https://catalog.s.download.windowsupdate.com/msdownload/update/software/crup/2008/03/windows6.0-kb949939-x64_194ca4626786f1928187c079586c2103ea0eb662.msu) |
 | x64 | KB936330 - Service Pack 1 Standalone | [windows6.0-kb936330-x64_12eed6cf0a842ce2a609c622b843afc289a8f4b9.exe](https://catalog.s.download.windowsupdate.com/msdownload/update/software/svpk/2008/04/windows6.0-kb936330-x64_12eed6cf0a842ce2a609c622b843afc289a8f4b9.exe) |
 
-### Service Pack 2
+#### Service Pack 2
 
 | Architecture | Name | Filename / Link | 
 | --- | --- | --- | 
-| x86 | KB955430 - Update for Windows Vista | [windows6.0-kb955430-x86_e9932d9bb9a71e65f19973e14636ac04e988e7b2.msu](https://catalog.s.download.windowsupdate.com/msdownload/update/software/crup/2009/04/windows6.0-kb955430-x86_e9932d9bb9a71e65f19973e14636ac04e988e7b2.msu) |
 | x86 | KB948465 - Service Pack 2 Standalone | [windows6.0-kb948465-x86_55f17352b4398ecb4f0cc20e3737631420ca1609.exe](https://catalog.s.download.windowsupdate.com/msdownload/update/software/svpk/2009/06/windows6.0-kb948465-x86_55f17352b4398ecb4f0cc20e3737631420ca1609.exe) |
-| x64 | KB955430 - Update for Windows Vista | [windows6.0-kb955430-x64_e685e41a6f9abdb982730ece83a6d4bf9f0908df.msu](https://catalog.s.download.windowsupdate.com/msdownload/update/software/crup/2009/04/windows6.0-kb955430-x64_e685e41a6f9abdb982730ece83a6d4bf9f0908df.msu) |
 | x64 | KB948465 - Service Pack 2 Standalone | [windows6.0-kb948465-x64_2eedca0bfa5ae8d1b0acf2117ddc4f15ac5183c9.exe](https://catalog.s.download.windowsupdate.com/msdownload/update/software/svpk/2009/06/windows6.0-kb948465-x64_2eedca0bfa5ae8d1b0acf2117ddc4f15ac5183c9.exe) |
 
 ## Windows 7
@@ -305,8 +330,8 @@ Updates WSUS offline updater wants to install after all the others have been ins
 
 # Enable running scripts!
 
-In order to run Powershell scripts, run the file [Set-ExecutionPolicy Unrestricted.bat](https://github.com/runeandre/slipstream_windows_updates/tree/main/Set-ExecutionPolicy/Set-ExecutionPolicy%20Unrestricted.bat)
+In order to run Powershell scripts, run the file [Set-ExecutionPolicy Unrestricted All.bat](https://github.com/runeandre/slipstream_windows_updates/tree/main/Set-ExecutionPolicy/Set-ExecutionPolicy%20Unrestricted%20All.bat)
 
-Or run the powershell command "Set-ExecutionPolicy Unrestricted".
+Or run the powershell command "Set-ExecutionPolicy Unrestricted" manually.
 
 You can revert to default settings with "Set-ExecutionPolicy Default" and "Set-ExecutionPolicy Default All" for all scopes.

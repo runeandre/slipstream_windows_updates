@@ -1,4 +1,6 @@
 ﻿## Logging
+Remove-Item "$($PWD)\log.txt" -Force -Confirm:$false -ErrorAction SilentlyContinue
+
 Write-Host "Logging to: $($PWD)\log.txt"
 $ErrorActionPreference="SilentlyContinue"
 Stop-Transcript | out-null
@@ -42,11 +44,28 @@ $program_files_x86 = ${Env:ProgramFiles(x86)}
 $program_files = ${Env:ProgramFiles}
 $windows_system32 = [System.Environment]::SystemDirectory
 $expand_exe = "$($windows_system32)\expand.exe"
+
+#adksetup
+$adksetup_url = "https://go.microsoft.com/fwlink/?linkid=2271337"
+$adksetup = "adksetup.exe"
 $oscdimg_x86 = "$($program_files_x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\x86\Oscdimg\oscdimg.exe"
 $oscdimg_x64 = "$($program_files_x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64\Oscdimg\oscdimg.exe"
+
+#7zip
 $7zip_86 = "$($program_files_x86)\7-Zip\7z.exe"
 $7zip_64 = "$($program_files)\7-Zip\7z.exe"
+$7zip_setup_x86_regex = ".exe"
+$7zip_setup_x64_regex = "-x64.exe"
+$7zip_setup_x86 = "7z-x86.exe"
+$7zip_setup_x64 = "7z-x64.exe"
 
+#Qemu
+$qemu_url_x86 = "https://qemu.weilnetz.de/w32/"
+$qemu_url_x64 = "https://qemu.weilnetz.de/w64/"
+$qemu_x86 = "$($program_files_x86)\qemu\qemu-system-i386.exe"
+$qemu_x64 = "$($program_files)\qemu\qemu-system-x86_64.exe"
+$qemu_img_x86 = "$($program_files_x86)\qemu\qemu-img.exe"
+$qemu_img_x64 = "$($program_files)\qemu\qemu-img.exe"
 
 # DVD
 $folder_name_tmp = "TMP"
@@ -64,66 +83,38 @@ $folder_cwd_windows_updates = "$($PWD)\Windows Updates"
 
 # Windows Vista Updates
 $folder_cwd_windows_vista = "$($PWD)\Windows Vista"
+$folder_cwd_windows_vista_resources_vm = "$($PWD)\Resources\Windows Vista VM"
 
 # Win Vista SP
-$folder_tmp_windows_vista_sp1 = "$($folder_tmp)\Windows Vista SP1"
-$folder_tmp_windows_vista_sp1_pre = "$($folder_tmp)\Windows Vista SP1 Prerequisites"
 $folder_cwd_windows_vista_sp1 = "$($folder_cwd_windows_vista)\Service Pack 1"
-$win_vista_sp1_exe_x86 = "02\windows6.0-kb936330-x86_b8a3fa8f819269e37d8acde799e7a9aea3dd4529.exe"
-$win_vista_sp1_exe_x64 = "02\windows6.0-kb936330-x64_12eed6cf0a842ce2a609c622b843afc289a8f4b9.exe"
+$win_vista_sp1_exe_x86 = "windows6.0-kb936330-x86_b8a3fa8f819269e37d8acde799e7a9aea3dd4529.exe"
+$win_vista_sp1_exe_x64 = "windows6.0-kb936330-x64_12eed6cf0a842ce2a609c622b843afc289a8f4b9.exe"
 
-# Win Vista SP1 pre requesites
-$win_vista_pre1_sp1_x86 = "01\windows6.0-kb935509-x86_083aa7934c3567ea6c2462a49c1ce4e5c2abe6a9.msu"
-$win_vista_pre1_sp1_x64 = "01\windows6.0-kb935509-x64_d5cc6a8c1a83b2d75b3df49fab1a70be044beb16.msu"
-$win_vista_pre1_sp1_x86_cab = "Windows6.0-KB935509-x86.cab"
-$win_vista_pre1_sp1_x64_cab = "Windows6.0-KB935509-x64.cab"
-$win_vista_pre2_sp1_x86 = "01\windows6.0-kb937287-x86_7c743a8b417d643dbe07eaa1c645be21ff8ae068.msu"
-$win_vista_pre2_sp1_x64 = "01\windows6.0-kb937287-x64_3387382c1226f026497318cf975188647031fcc8.msu"
-$win_vista_pre2_sp1_x86_cab = "Windows6.0-KB937287-x86.cab"
-$win_vista_pre2_sp1_x64_cab = "Windows6.0-KB937287-x64.cab"
-$win_vista_pre3_sp1_x86 = "01\windows6.0-kb938371-v2-x86_64465f21711c8fa12d5671d79363a72e43babafd.msu"
-$win_vista_pre3_sp1_x64 = "01\windows6.0-kb938371-v2-x64_d4df75be66d34595c060f86737479c4b0f220163.msu"
-$win_vista_pre3_sp1_x86_cab = "Windows6.0-KB938371-v2-x86.cab"
-$win_vista_pre3_sp1_x64_cab = "Windows6.0-KB938371-v2-x64.cab"
-$win_vista_pre4_sp1_x86 = "01\windows6.0-kb949939-x86_b4a77f7f20405bd714b5fcf8ddb1ffed6095814d.msu"
-$win_vista_pre4_sp1_x64 = "01\windows6.0-kb949939-x64_194ca4626786f1928187c079586c2103ea0eb662.msu"
-$win_vista_pre4_sp1_x86_cab = "Windows6.0-KB949939-x86.cab"
-$win_vista_pre4_sp1_x64_cab = "Windows6.0-KB949939-x64.cab"
-
-# Win Vista Pre requesites within SP1
-$win_vista_sp1_pre1_x86 = "windows6.0-kb937287-X86.cab"
-$win_vista_sp1_pre1_x64 = "windows6.0-kb937287-X64.cab"
-$win_vista_sp1_pre2_x86 = "windows6.0-kb935509-X86.cab"
-$win_vista_sp1_pre2_x64 = "windows6.0-kb935509-X64.cab"
-$win_vista_sp1_pre3_x86 = "windows6.0-kb937954-X86.cab"
-$win_vista_sp1_pre3_x64 = "windows6.0-kb937954-X64.cab"
-$win_vista_sp1_pre4_x86 = "windows6.0-kb938371-X86.cab"
-$win_vista_sp1_pre4_x64 = "windows6.0-kb938371-X64.cab"
-
-$win_vista_sp1_cab_x86 = "windows6.0-kb936330-X86.cab"
-$win_vista_sp1_cab_x64 = "windows6.0-kb936330-X64.cab"
-$folder_tmp_kb936330 = "$($folder_tmp)\windows6.0-kb936330"
-$win_vista_sp1_update_mum = "update.mum"
-$ddf
-
-$folder_tmp_windows_vista_sp2 = "$($folder_tmp)\Windows Vista SP2"
 $folder_cwd_windows_vista_sp2 = "$($folder_cwd_windows_vista)\Service Pack 2"
+$win_vista_sp2_exe_x86 = "windows6.0-kb948465-x86_55f17352b4398ecb4f0cc20e3737631420ca1609.exe"
+$win_vista_sp2_exe_x64 = "windows6.0-kb948465-x64_2eedca0bfa5ae8d1b0acf2117ddc4f15ac5183c9.exe"
+
+#VM
+$folder_tmp_windows_vista_sp_vm = "$($folder_tmp)\Windows Vista SP VM"
+$folder_tmp_windows_vista_sp_vm_iso = "$($folder_tmp_windows_vista_sp_vm)\Windows ISO"
+$folder_tmp_windows_vista_sp_vm_mount = "$($folder_tmp)\OS_VHD_Mount"
+$win_vista_autounattend = "autounattend.xml"
+$win_vista_UpdateWindows = "UpdateWindows.cmd"
+$win_vista_sp_wim_keep_folders = "$($folder_tmp_windows_vista_sp_vm_mount)\bootmgr","$($folder_tmp_windows_vista_sp_vm_mount)\Boot","$($folder_tmp_windows_vista_sp_vm_mount)\Documents and Settings","$($folder_tmp_windows_vista_sp_vm_mount)\Program Files","$($folder_tmp_windows_vista_sp_vm_mount)\Program Files (x86)","$($folder_tmp_windows_vista_sp_vm_mount)\ProgramData","$($folder_tmp_windows_vista_sp_vm_mount)\Users","$($folder_tmp_windows_vista_sp_vm_mount)\Windows"
 
 # Win Vista WAIK
+$waik_url = "https://download.microsoft.com/download/9/c/d/9cdfa30e-5901-40e4-b6bf-4a0086ea0a6a/6001.18000.080118-1840-kb3aikl_en.iso"
 $waik_iso_name = "6001.18000.080118-1840-kb3aikl_en"
 $waik_iso = "$($waik_iso_name).iso"
 $waik_tmp = "$($folder_tmp)\$waik_iso_name"
 $waik_setup_x86 = "waikx86.msi"
 $waik_setup_x64 = "waikamd64.msi"
-$pkgmgr_x86 = "$($program_files)\Windows AIK\Tools\x86\Servicing\pkgmgr.exe"
-$pkgmgr_x64 = "$($program_files)\Windows AIK\Tools\amd64\Servicing\pkgmgr.exe"
-$etfsboot_x86 = "$($program_files)\Windows AIK\Tools\PETools\x86\boot\etfsboot.com"
-$etfsboot_x64 = "$($program_files)\Windows AIK\Tools\PETools\amd64\boot\etfsboot.com"
-$7zip_setup_x86_regex = ".exe"
-$7zip_setup_x64_regex = "-x64.exe"
-$7zip_setup_x86 = "7z-x86.exe"
-$7zip_setup_x64 = "7z-x64.exe"
-
+$waik_x86 = "$($program_files_x86)\Windows AIK"
+$waik_x64 = "$($program_files)\Windows AIK"
+$imagex_x86 = "$($program_files_x86)\Windows AIK\Tools\x86\imagex.exe"
+$imagex_x64 = "$($program_files)\Windows AIK\Tools\amd64\imagex.exe"
+$etfsboot_x86 = "\Tools\PETools\x86\boot\etfsboot.com" # Path is completed later on
+$etfsboot_x64 = "\Tools\PETools\amd64\boot\etfsboot.com" # Path is completed later on
 
 # Windows 7 Updates
 $folder_cwd_windows7 = "$($PWD)\Windows 7"
@@ -171,21 +162,29 @@ $win7_esuscript_cmd = "$($folder_win7_esuscript)\ESU_Script.cmd"
 # For x86 32-bit systems
 $oscdimg = $oscdimg_x86
 $7zip = $7zip_86
-$waik_setup = $waik_setup_x86
-$pkgmgr = $pkgmgr_x86
-$etfsboot = $etfsboot_x86
 $7zip_setup_regex = $7zip_setup_x86_regex
 $7zip_setup = $7zip_setup_x86
+$waik_setup = $waik_setup_x86
+$waik = $waik_x86
+$etfsboot = $etfsboot_x86
+$imagex = $imagex_x86
+$qemu_url = $qemu_url_x86
+$qemu = $qemu_x86
+$qemu_img = $qemu_img_x86
 
 # For x86 64-bit systems
 if ([Environment]::Is64BitProcess) {
     $oscdimg = $oscdimg_x64
 	$7zip = $7zip_64
-	$waik_setup = $waik_setup_x64
-	$pkgmgr = $pkgmgr_x64
-	$etfsboot = $etfsboot_x64
 	$7zip_setup_regex = $7zip_setup_x64_regex
 	$7zip_setup = $7zip_setup_x64
+	$waik_setup = $waik_setup_x64
+	$waik = $waik_x64
+	$etfsboot = $etfsboot_x64
+	$imagex = $imagex_x64
+	$qemu_url = $qemu_url_x64
+	$qemu = $qemu_x64
+	$qemu_img = $qemu_img_x64
 }
 
 ###############
@@ -221,9 +220,12 @@ function Mount-ISO {
 }
 
 function Mount-Wim {
-	Write-Host " "
-	Write-Host "Mount WIM file ""$($folder_windows_iso)\sources\$($installFile)"" to ""$($folder_tmp)\mount"" "
-	dism /mount-wim /wimfile:"$($folder_windows_iso)\sources\$($installFile)" /index:$selection /mountdir:"$($folder_tmp)\mount"
+	#DISM can't mount the Windows Vista RTM WIM
+	if ($dvd_windows -ne $dvd_version_win_vista -And $dvd_servicepack_level -ne "<undefined>"){
+		Write-Host " "
+		Write-Host "Mount WIM file ""$($folder_windows_iso)\sources\$($installFile)"" to ""$($folder_tmp)\mount"" "
+		dism /mount-wim /wimfile:"$($folder_windows_iso)\sources\$($installFile)" /index:$selection /mountdir:"$($folder_tmp)\mount"
+	}
 }
 
 function Unmount-Image-Commit {
@@ -240,37 +242,12 @@ function Unmount-Image-Discard-Cleanup {
 	Write-Host " "
 	Write-Host "Unmount ""$($folder_tmp)\mount"" and discard. Cleanup wim"
 	if ($windows8_or_higher) {
-		dism /unmount-image /mountdir:"$($folder_tmp)\mount" /discard
+		dism /Unmount-Image /MountDir:"$($folder_tmp)\mount" /Discard
 	} else {
 		dism /unmount-wim /mountdir:"$($folder_tmp)\mount" /discard
 	}
 	dism /cleanup-wim
 }
-
-function Create-CAB-DDF([string]$RootDir, [string]$CurrentDir){
-	# Add folder tag for subfolders (skip for root files)
-	if($RootDir -ne $CurrentDir){
-		$RootDirWithBackslash = "$($RootDir)\"
-		$ddfDir = $CurrentDir -Replace [regex]::Escape($RootDirWithBackslash),""
-		
-		$script:ddf += ".Set DestinationDir=$($ddfDir)" #`r`n
-	}
-	
-	# Add files to DDF
-	$script:ddf+=(Get-ChildItem -Path "$CurrentDir" -Attributes !Directory -Name).ForEach({"""$($CurrentDir)\{0}""" -f $_}) #`r`n
-	
-	# Recursive call
-	(Get-ChildItem -Path "$CurrentDir" -Attributes Directory -Name).ForEach({ Create-CAB-DDF "$($RootDir)" "$($CurrentDir)\$_" })
-	
-	# Run at the end in the original function call, so we only do it once
-	if($RootDir -eq $CurrentDir){
-		# The ForEach loop for the files adds a space on the start of each line, so lets remove them.
-		$script:ddf = $script:ddf -Replace " `"C:","`"C:"
-	}
-	
-	# Source: https://stackoverflow.com/questions/21652659/windows-cabinet-file-for-sub-directories
-}
-
 
 ### Check for ISO
 if(-Not ([System.IO.File]::Exists("$dvd_source_name"))){
@@ -294,17 +271,17 @@ if (![System.IO.File]::Exists("$($expand_exe)")) {
 ### Install adksetup.exe to "$($program_files_x86)\Windows Kits\10\" if oscdimg is missing ###
 Write-Host " "
 if (![System.IO.File]::Exists($oscdimg)) {
-    Write-Host "Install adksetup.exe in order to get oscdimg.exe"
+    Write-Host "Install $adksetup in order to get oscdimg.exe"
 
     # Download adksetup.exe
-    if (![System.IO.File]::Exists("$($PWD)\adksetup.exe")) {
+    if (![System.IO.File]::Exists("$($PWD)\$($adksetup)")) {
         Write-Host "Download missing adksetup.exe setup file"
-        Invoke-WebRequest https://go.microsoft.com/fwlink/?linkid=2271337 -OutFile adksetup.exe
+        Invoke-WebRequest $adksetup_url -OutFile $adksetup
     }
 
     # Silent install of adksetup.exe and DeploymentTools
-    Write-Host "Silent adksetup.exe install to '$($program_files_x86)\Windows Kits\10\'"
-    & "$($PWD)\adksetup.exe" /quiet /installpath "$($program_files_x86)\Windows Kits\10" /features OptionId.DeploymentTools
+    Write-Host "Silent $adksetup install to '$($program_files_x86)\Windows Kits\10\'"
+    & "$($PWD)\$($adksetup)" /quiet /installpath "$($program_files_x86)\Windows Kits\10" /features OptionId.DeploymentTools
 }
 Write-Host "Location of oscdimg: $($oscdimg)"
 
@@ -425,14 +402,15 @@ $dvd_version_win10_name = "Windows 10"
 $dvd_version_win11 = "11"
 $dvd_version_win11_name = "Windows 11"
 
+$dvd_windows
 if ("$($dvd_windows_version)" -like "*$($dvd_version_win_vista_name)*"){
-    $dvd_windows_version = $dvd_version_win_vista
+    $dvd_windows = $dvd_version_win_vista
 } elseif ("$($dvd_windows_version)" -like "*$($dvd_version_win7_name)*"){
-    $dvd_windows_version = $dvd_version_win7
+    $dvd_windows = $dvd_version_win7
 } elseif ("$($dvd_windows_version)" -like "*$($dvd_version_win10_name)*"){
-    $dvd_windows_version = $dvd_version_win10
+    $dvd_windows = $dvd_version_win10
 } elseif ("$($dvd_windows_version)" -like "*$($dvd_version_win11_name)*"){
-    $dvd_windows_version = $dvd_version_win11
+    $dvd_windows = $dvd_version_win11
 } else {
 	Write-Host " "
 	Write-Host "Unsupported Windows version!"
@@ -446,20 +424,9 @@ if ("$($dvd_windows_version)" -like "*$($dvd_version_win_vista_name)*"){
 ### Choose architecture to match DVD/ISO architecture ###
 
 # For x86 32-bit systems
-$win_vista_pre1_sp1 = $win_vista_pre1_sp1_x86
-$win_vista_pre2_sp1 = $win_vista_pre2_sp1_x86
-$win_vista_pre3_sp1 = $win_vista_pre3_sp1_x86
-$win_vista_pre4_sp1 = $win_vista_pre4_sp1_x86
-$win_vista_pre1_sp1_cab = $win_vista_pre1_sp1_x86_cab
-$win_vista_pre2_sp1_cab = $win_vista_pre2_sp1_x86_cab
-$win_vista_pre3_sp1_cab = $win_vista_pre3_sp1_x86_cab
-$win_vista_pre4_sp1_cab = $win_vista_pre4_sp1_x86_cab
 $win_vista_sp1_exe = $win_vista_sp1_exe_x86
-$win_vista_sp1_pre1 = $win_vista_sp1_pre1_x86
-$win_vista_sp1_pre2 = $win_vista_sp1_pre2_x86
-$win_vista_sp1_pre3 = $win_vista_sp1_pre3_x86
-$win_vista_sp1_pre4 = $win_vista_sp1_pre4_x86
-$win_vista_sp1_cab = $win_vista_sp1_cab_x86
+$win_vista_sp2_exe = $win_vista_sp2_exe_x86
+$etfsboot = "$($waik)\$($etfsboot_x86)"
 
 $win7_sp1_exe = $win7_sp1_exe_x86
 $win7_sp1_cab = $win7_sp1_cab_x86
@@ -469,20 +436,9 @@ $win7_ie11_support = $win7_ie11_support_x86
 
 # For x86 64-bit systems
 if ($dvd_architecture -eq "x64") {
-	$win_vista_pre1_sp1 = $win_vista_pre1_sp1_x64
-	$win_vista_pre2_sp1 = $win_vista_pre2_sp1_x64
-	$win_vista_pre3_sp1 = $win_vista_pre3_sp1_x64
-	$win_vista_pre4_sp1 = $win_vista_pre4_sp1_x64
-	$win_vista_pre1_sp1_cab = $win_vista_pre1_sp1_x64_cab
-	$win_vista_pre2_sp1_cab = $win_vista_pre2_sp1_x64_cab
-	$win_vista_pre3_sp1_cab = $win_vista_pre3_sp1_x64_cab
-	$win_vista_pre4_sp1_cab = $win_vista_pre4_sp1_x64_cab
 	$win_vista_sp1_exe = $win_vista_sp1_exe_x64
-	$win_vista_sp1_pre1 = $win_vista_sp1_pre1_x64
-	$win_vista_sp1_pre2 = $win_vista_sp1_pre2_x64
-	$win_vista_sp1_pre3 = $win_vista_sp1_pre3_x64
-	$win_vista_sp1_pre4 = $win_vista_sp1_pre4_x64
-	$win_vista_sp1_cab = $win_vista_sp1_cab_x64
+	$win_vista_sp2_exe = $win_vista_sp2_exe_x64
+	$etfsboot = "$($waik)\$($etfsboot_x86)"
 	
 	$win7_sp1_exe = $win7_sp1_exe_x64
 	$win7_sp1_cab = $win7_sp1_cab_x64
@@ -523,7 +479,7 @@ if(Test-Path -Path "$($folder_tmp)"){
 }
 
 ### Create folders
-if ($dvd_windows_version -eq $dvd_version_win_vista) {
+if ($dvd_windows -eq $dvd_version_win_vista) {
 	# Windows 7
 	if(-Not (Test-Path -Path "$folder_cwd_windows_vista_sp1")){
 		mkdir "$($folder_cwd_windows_vista_sp1)"
@@ -538,7 +494,7 @@ if ($dvd_windows_version -eq $dvd_version_win_vista) {
 		
 		Pause
 	}
-} elseif ($dvd_windows_version -eq $dvd_version_win7) {
+} elseif ($dvd_windows -eq $dvd_version_win7) {
 	# Windows 7
 	if(-Not (Test-Path -Path "$folder_cwd_windows7_sp1")){
 		mkdir "$($folder_cwd_windows7_sp1)"
@@ -632,12 +588,7 @@ if ($windows8_or_higher) {
 ### Unmount ISO
 Unmount-ISO
 
-### Copy DVD folder with custom content
-if(Test-Path -Path "$folder_copy_to_iso"){
-	Write-Host " "
-	Write-Host "Copying the ""$folder_copy_to_iso"" folder to ""$($folder_windows_iso)"". It will be included in the finished ISO."
-	Copy-item -Force -Recurse "$folder_copy_to_iso\*" -Destination "$($folder_windows_iso)\"
-}
+
 
 ### Read Write permissions
 attrib -r -h "$($folder_tmp)\*.*" /s /d
@@ -663,7 +614,7 @@ if ($windows8_or_higher) {
 ### ESU Script ###
 ##################
 Write-Host " "
-if ($dvd_windows_version -eq $dvd_version_win7 -And [System.IO.File]::Exists($win7_esuscript_cmd)) {
+if ($dvd_windows -eq $dvd_version_win7 -And [System.IO.File]::Exists($win7_esuscript_cmd)) {
 	# Mount
 	Mount-Wim
 	
@@ -694,95 +645,15 @@ Press any key to continue once the ESU script has finished!
 	Unmount-Image-Commit
 } else {
 	Write-Host " "
-	Write-Host "The script ""$($win7_esuscript_cmd)"" was not found. Skipping it!"
+	Write-Host "The script ""$($win7_esuscript_cmd)"" was not found, or the ISO is not Windows 7. Skipping it!"
 	Write-Host " "
-}
-
-
-######################################
-### Windows Vista - Service Pack 1 ###
-######################################
-# Unpack Service Pack 1 if it's Windows Vista, has Service Pack Level 0 and the service pack file exists
-if ($dvd_windows_version -eq $dvd_version_win_vista -And ($dvd_servicepack_level -eq "0" -Or $dvd_servicepack_level -eq "<undefined>") -And [System.IO.File]::Exists("$($folder_cwd_windows_vista_sp1)\$($win_vista_sp1_exe)")) {
-	Write-Host " "
-	Write-Host "#########################"
-	Write-Host "####### WARNING! ########"
-	Write-Host "#########################"
-	Write-Host " "
-	Write-Host "Slipstreaming Service Pack 1 onto Windows Vista hasn't worked so far!"
-	Write-Host "I would suggest downloading an ISO with SP1 already, or slipstream it with vLite."
-	Write-Host "Press any key to continue and try anyway..."
-	Write-Host " "
-	
-	Pause
-	
-	Write-Host " "
-	Write-Host "Create the folder: $($folder_tmp_windows_vista_sp1)"
-	mkdir "$($folder_tmp_windows_vista_sp1)"
-	
-	Write-Host "Create the folder: $($folder_tmp_kb936330)"
-	mkdir "$($folder_tmp_kb936330)"
-
-	# Extract SP1 Prerequisite CABs from MSUs
-	Start-Process "$($7zip)" -ArgumentList @("x `"$($folder_cwd_windows_vista_sp1)\$($win_vista_pre1_sp1)`" -o`"$($folder_tmp_windows_vista_sp1_pre)`" `"$($win_vista_pre1_sp1_cab)`"") -NoNewWindow -Wait
-	Start-Process "$($7zip)" -ArgumentList @("x `"$($folder_cwd_windows_vista_sp1)\$($win_vista_pre2_sp1)`" -o`"$($folder_tmp_windows_vista_sp1_pre)`" `"$($win_vista_pre2_sp1_cab)`"") -NoNewWindow -Wait
-	Start-Process "$($7zip)" -ArgumentList @("x `"$($folder_cwd_windows_vista_sp1)\$($win_vista_pre3_sp1)`" -o`"$($folder_tmp_windows_vista_sp1_pre)`" `"$($win_vista_pre3_sp1_cab)`"") -NoNewWindow -Wait
-	Start-Process "$($7zip)" -ArgumentList @("x `"$($folder_cwd_windows_vista_sp1)\$($win_vista_pre4_sp1)`" -o`"$($folder_tmp_windows_vista_sp1_pre)`" `"$($win_vista_pre4_sp1_cab)`"") -NoNewWindow -Wait
-
-
-	# Extract SP1 exe
-	Write-Host " "
-	Write-Host "The command: Start-Process ""$($folder_cwd_windows_vista_sp1)\$($win_vista_sp1_exe)"" -ArgumentList @(""/X:`"$($folder_tmp_windows_vista_sp1)`""") -NoNewWindow -Wait "
-	Start-Process "$($folder_cwd_windows_vista_sp1)\$($win_vista_sp1_exe)" -ArgumentList @("/X:`"$($folder_tmp_windows_vista_sp1)`"") -NoNewWindow -Wait
-	
-	# Extract windows6.1-KB976932-X__.cab
-	try { 
-		Write-Host " "
-		Write-Host "Start-Process ""$($expand_exe)"" -ArgumentList @(""-F:*"",""`"$($folder_tmp_windows_vista_sp1)\$($win_vista_sp1_cab)`""",""`"$($folder_tmp_kb936330)`""") -NoNewWindow -Wait"
-		Start-Process "$($expand_exe)" -ArgumentList @("-F:*","`"$($folder_tmp_windows_vista_sp1)\$($win_vista_sp1_cab)`"","`"$($folder_tmp_kb936330)`"") -NoNewWindow -Wait
-	} catch { 
-		Write-host "An error occurred while extracting ""$($folder_tmp_windows_vista_sp1)\$($win_vista_sp1_cab)"" to ""$($folder_tmp_kb936330)""."
-	}
-
-	## Update update.mum ##
-	[xml]$xmlDoc = Get-Content "$($folder_tmp_kb936330)\$($win_vista_sp1_update_mum)"
-	Write-Host " "
-	Write-Host "update.mum"
-	Write-Host "allowedOffline: $($xmlDoc.assembly.package.packageExtended.allowedOffline)"
-	$xmlDoc.assembly.package.packageExtended.allowedOffline = "true"
-	$xmlDoc.Save("$($folder_tmp_kb936330)\$($win_vista_sp1_update_mum)")
-	
-	## Recreate CAB
-	Write-Host " "
-	Write-Host "Recreate CAB ""$($folder_tmp_windows_vista_sp1)\$($win_vista_sp1_cab) """
-
-	Write-Host " "
-	Write-Host "Populate DDF variable with the files and folders from ""$($folder_tmp_kb936330)"""
-	Create-CAB-DDF "$($folder_tmp_kb936330)" "$($folder_tmp_kb936330)"
-	
-	Write-Host " "
-	Write-Host "Write DDF content to the file ""$($folder_tmp)\files.txt"""
-	$ddf | Out-File "$($folder_tmp)\files.ddf" -Encoding Ascii # IT'S REALLY IMPORTANT that we generate an ASCII (ANSI) text file. UTF8 causes errors
-	
-	# Change to TMP folder so that makecab puts temp files there
-	$originalPWD = "$($PWD)"
-	cd "$($folder_tmp)"
-	
-	Write-Host "The command: makecab /f ""$($folder_tmp)\files.ddf"""
-	makecab /D CabinetNameTemplate="Updated_$($win_vista_sp1_cab)" /D DiskDirectory1="$($folder_tmp)" /D MaxDiskSize=0 /D Cabinet=on /D Compress=on /D CompressionType=MSZIP /f "$($folder_tmp)\files.ddf"
-	
-	# Change back to the original root folder / PWD
-	cd "$($originalPWD)"
-	
-	# Sources: https://msfn.org/board/topic/116725-tutorial-how-to-slipstream-vista-sp1-into-vista-rtm-using-waik/
-	#          https://stackoverflow.com/questions/45306085/convert-text-file-to-ansi-format
 }
 
 ##################################
 ### Windows 7 - Service Pack 1 ###
 ##################################
 # Unpack Service Pack 1 if it's Windows 7, has Service Pack Level 0 and the service pack file exists
-if ($dvd_windows_version -eq $dvd_version_win7 -And $dvd_servicepack_level -eq "0" -And [System.IO.File]::Exists("$($folder_cwd_windows7_sp1)\$($win7_sp1_exe)")) {
+if ($dvd_windows -eq $dvd_version_win7 -And $dvd_servicepack_level -eq "0" -And [System.IO.File]::Exists("$($folder_cwd_windows7_sp1)\$($win7_sp1_exe)")) {
 	mkdir "$($folder_tmp_windows7_sp1)"
 
 	# Extract SP1
@@ -859,7 +730,7 @@ if ($dvd_windows_version -eq $dvd_version_win7 -And $dvd_servicepack_level -eq "
 ######################################
 ## Windows 7 - Internet Explorer 11 ##
 ######################################
-if ($dvd_windows_version -eq $dvd_version_win7 -And [System.IO.File]::Exists("$($folder_cwd_windows7_ie11)\$($win7_ie11)")) {
+if ($dvd_windows -eq $dvd_version_win7 -And [System.IO.File]::Exists("$($folder_cwd_windows7_ie11)\$($win7_ie11)")) {
 	Write-Host " "
 	Write-Host "Prepare Internet Explorer 11 files"
 	Write-Host "CWD Folder & File: $($folder_cwd_windows7_ie11)\$($win7_ie11)"
@@ -876,16 +747,12 @@ if ($dvd_windows_version -eq $dvd_version_win7 -And [System.IO.File]::Exists("$(
 ### Update Windows ###
 ######################
 
-# Mount install.wim
-Mount-Wim
-
-### Windows Vista Service Pack 1 ###
-# Install Service Pack 1 if it's Windows 7, has Service Pack Level 0 and the service pack file exists
-if ($dvd_windows_version -eq $dvd_version_win_vista -And ($dvd_servicepack_level -eq "0" -Or $dvd_servicepack_level -eq "<undefined>") -And [System.IO.File]::Exists("$($folder_cwd_windows_vista_sp1)\$($win_vista_sp1_exe)")) {
-	$sandbox = "$($folder_tmp)\win_vista_sp1_sandbox"
-	mkdir "$($sandbox)"
-	
-	if (![System.IO.File]::Exists($pkgmgr)) {
+######################################
+### Windows Vista - Service Packs ###
+######################################
+# Install Service Pack 1 and 2 if it's Windows Vista, has Service Pack Level <undefined> and the service pack file exists
+if ($dvd_windows -eq $dvd_version_win_vista -And $dvd_servicepack_level -eq "<undefined>" -And [System.IO.File]::Exists("$($folder_cwd_windows_vista_sp1)\$($win_vista_sp1_exe)") -And [System.IO.File]::Exists("$($folder_cwd_windows_vista_sp2)\$($win_vista_sp2_exe)")) {
+	if (![System.IO.File]::Exists($etfsboot)) {
 		if (![System.IO.File]::Exists($7zip)) {
 			Write-Host " "
 			Write-Host "Downloading and installing 7zip"
@@ -897,7 +764,7 @@ if ($dvd_windows_version -eq $dvd_version_win_vista -And ($dvd_servicepack_level
 			if (![System.IO.File]::Exists("$($PWD)\$($7zip_setup)")) {
 				# Find latest version of 7zip (Source: https://www.reddit.com/r/PowerShell/comments/9gwbed/scrape_7zip_website_for_the_latest_version/)
 				$data = Invoke-webrequest -Uri "https://www.7-zip.org/download.html" -UseBasicParsing
-				$link = $data.links | Where href -like "*$($7zip_setup_regex)" | Sort-Object {$null = $_.href -match "a\/7z(\d{3,4})\$($7zip_setup_regex)";[int]$Matches[1] } -Descending | Select Select -First 1 | Select href
+				$link = $data.links | Where href -like "*$($7zip_setup_regex)" | Sort-Object {$null = $_.href -match "a\/7z(\d{3,4})\$($7zip_setup_regex)";[int]$Matches[1] } -Descending | Select -First 1 | Select href
 				$url = "https://www.7-zip.org/$($link.href)"
 				$filename = $url -replace '.*\/' 
 				Write-Host " "
@@ -908,12 +775,10 @@ if ($dvd_windows_version -eq $dvd_version_win_vista -And ($dvd_servicepack_level
 			
 			Write-Host "Installing 7zip, will continue once completed."
 			Start-Process "$7zip_setup" -Wait
-			
-			Pause
 		}
 		
 		Write-Host " "
-		Write-Host "Installing Windows AIK in order to get it's pkgmgr.exe, required for Windows Vista SP1 integration."
+		Write-Host "Installing Windows AIK in order to get etfsboot, required for Windows Vista ISO creation."
 		Write-Host "Be aware that the ISO file downloaded is 1.34GB in size, while the setup file itself is 100-200MB."
 		
 		Write-Host " "
@@ -921,15 +786,13 @@ if ($dvd_windows_version -eq $dvd_version_win_vista -And ($dvd_servicepack_level
 		Write-Host "2. Extracting ""$($waik_iso)"" to ""$($waik_tmp)"""
 		Write-Host "3. Running the WAIK setup file ""$($waik_tmp)\$($waik_setup)"""
 		Write-Host " "
-		Write-Host ">>> NOTE! You will have to complete the setup manually when it starts!!! <<<"
-		Write-Host " "
 		
 		Pause
 
 		# Download setup
 		if (![System.IO.File]::Exists("$($PWD)\$($waik_iso)")) {
-			Write-Host "Download missing $($waik_iso) setup ISO file"
-			Invoke-WebRequest https://download.microsoft.com/download/9/c/d/9cdfa30e-5901-40e4-b6bf-4a0086ea0a6a/6001.18000.080118-1840-kb3aikl_en.iso -OutFile $waik_iso
+			Write-Host "Download missing $($waik_iso) setup ISO file from $waik_url"
+			Invoke-WebRequest $waik_url -OutFile $waik_iso
 		}
 
 		Write-Host "The command: Start-Process ""$($7zip)"" -ArgumentList @(""x `"$waik_iso`" -o`"$($waik_tmp)`""") -NoNewWindow -Wait"
@@ -941,65 +804,161 @@ if ($dvd_windows_version -eq $dvd_version_win_vista -And ($dvd_servicepack_level
 		Write-Host " "
 		Write-Host "Finished installing Windows AIK (assuming you completed it)."
 	}
+	
+	# Install Qemu if missing
+	if (![System.IO.File]::Exists($qemu)) {
+		Write-Host " "
+		Write-Host "Downloading and installing Qemu"
+		Write-Host "We need Qemu in order to install Windows Vista and it's service packs. Will then extract an updated image from this installation."
+		
+		Pause
+		
+		# Find latest version of Qemu (Source: https://www.reddit.com/r/PowerShell/comments/9gwbed/scrape_7zip_website_for_the_latest_version/)
+		$data = Invoke-webrequest -Uri "$qemu_url" -UseBasicParsing
+		$url = $data.links | Where href -like "*.exe" | Sort-Object -Descending | Select -First 1 | Select href
+		
+		#Trim start and end HTML stuff away from the URL
+		$url = $url -Replace "@{href=",""
+		$url = $url -Replace "}",""
+		
+		#The extracted URL only contains the filename, so we set it
+		$filename = $url
+		
+		# Combine the URL path with the filename
+		$url = "$($qemu_url)$($url)"
+		
+		# Download setup
+		if (![System.IO.File]::Exists("$($PWD)\$($filename)")) {		
+			Write-Host " "
+			Write-Host "Downloading ""$($url)"" and saving to ""$($PWD)\$($filename)"""
+			Invoke-WebRequest "$($url)" -OutFile "$($PWD)\$($filename)"
+		}
+		
+		Write-Host "Installing Qemu, will continue once completed."
+		Start-Process "$($PWD)\$($filename)" -Wait
+	}
+	
+	Write-Host " "
+	Write-Host "Prepare VM files"
+	mkdir "$folder_tmp_windows_vista_sp_vm"
+	
+	Copy-item -Force -Recurse "$folder_windows_iso" -Destination "$folder_tmp_windows_vista_sp_vm" #-Verbose
+	Copy-item -Force "$($folder_cwd_windows_vista_sp1)\$($win_vista_sp1_exe)" -Destination "$($folder_tmp_windows_vista_sp_vm_iso)\$($win_vista_sp1_exe)"
+	Copy-item -Force "$($folder_cwd_windows_vista_sp2)\$($win_vista_sp2_exe)" -Destination "$($folder_tmp_windows_vista_sp_vm_iso)\$($win_vista_sp2_exe)"
+	Copy-item -Force "$($folder_cwd_windows_vista_resources_vm)\*.*" -Destination "$folder_tmp_windows_vista_sp_vm_iso"
+	
+	Write-Host " "
+	Write-Host "Update autounattend.xml"
+	$flags
+	$cdkey
+	if("$dvd_windows_version" -like "*STARTER*"){
+		# Windows Vista Starter
+		$cdkey = "X9PYV-YBQRV-9BXWV-TQDMK-QDWK4"
+		$flags = "Starter"
+	} elseif("$dvd_windows_version" -like "*HOMEBASIC*") {
+		# Windows Vista Home Basic
+		$cdkey = "RCG7P-TX42D-HM8FM-TCFCW-3V4VD"
+		$flags = "HomeBasic"
+	} elseif("$dvd_windows_version" -like "*HOMEPREMIUM*") {
+		# Windows Vista Home Premium
+		$cdkey = "X9HTF-MKJQQ-XK376-TJ7T4-76PKF"
+		$flags = "HomePremium"
+	} elseif("$dvd_windows_version" -like "*BUSINESS*") {
+		# Windows Vista Business
+		$cdkey = "4D2XH-PRBMM-8Q22B-K8BM3-MRW4W"
+		$flags = "Business"
+	} elseif("$dvd_windows_version" -like "*ULTIMATE*") {
+		# Windows Vista Ultimate
+		$cdkey = "VMCB9-FDRV6-6CDQM-RV23K-RP8F7"
+		$flags = "Ultimate"
+	}
+	# Source Generic keys: https://www.windowsafg.com/keys.html
+	
+	Write-Host " "
+	Write-Host "$dvd_windows_version"
+	Write-Host "CD-Key: $cdkey"
+	
+	$autounattend = "$($folder_tmp_windows_vista_sp_vm_iso)\$($win_vista_autounattend)"
+	(Get-Content "$autounattend").Replace("<image_index>", "$selection") | Set-Content "$autounattend"
+	(Get-Content "$autounattend").Replace("<cd_key>", "$cdkey") | Set-Content "$autounattend"
+	
+	Write-Host " "
+	Write-Host "Update $win_vista_UpdateWindows"
+	$UpdateWindows = "$($folder_tmp_windows_vista_sp_vm_iso)\$($win_vista_UpdateWindows)"
+	
+	(Get-Content "$UpdateWindows").Replace("<service_pack_1_exe>", "$win_vista_sp1_exe") | Set-Content "$UpdateWindows"
+	(Get-Content "$UpdateWindows").Replace("<service_pack_2_exe>", "$win_vista_sp2_exe") | Set-Content "$UpdateWindows"
+	
+	Write-Host " "
+	Write-Host " Create an ISO for Virtual Machine"
+	& $oscdimg -m -o -h -u2 -udfver102 -b"$etfsboot" "$folder_tmp_windows_vista_sp_vm_iso" "$($folder_tmp_windows_vista_sp_vm)\Windows.iso"
+	
+	Write-Host " "
+	Write-Host "Start the Virtual Machine"
+	
+	$os_image = "OS_HDD.img"
+	Write-Host " "
+	Write-Host "Create VM HDD"
+	Write-Host "The command: Start-Process ""$qemu_img"" -ArgumentList @(""create -f raw `"$($folder_tmp_windows_vista_sp_vm)\$($os_image)`" 25G"") -Wait"
+	Start-Process "$qemu_img" -ArgumentList @("create -f raw `"$($folder_tmp_windows_vista_sp_vm)\$($os_image)`" 25G") -Wait
+	
+	Write-Host " "
+	Write-Host "Run VM and update Windows Vista with Service Pack 1 and 2"
+	Write-Host "The command: Start-Process ""$qemu"" -ArgumentList @(""-m 2048 -smp 2 -boot d -cdrom `"$($folder_tmp_windows_vista_sp_vm)\Windows.iso`" -drive file=`"$($folder_tmp_windows_vista_sp_vm)\$($os_image)`",format=raw,index=0,media=disk"") -Wait"
+	Start-Process "$qemu" -ArgumentList @("-m 2048 -smp 2 -boot d -cdrom `"$($folder_tmp_windows_vista_sp_vm)\Windows.iso`" -drive file=`"$($folder_tmp_windows_vista_sp_vm)\$($os_image)`",format=raw,index=0,media=disk") -Wait
+	
+	Write-Host " "
+	Write-Host "Convert RAW HDD image to VHD that Windows can mount"
+	Write-Host "The command: Start-Process ""$qemu_img"" -ArgumentList @(""convert `"$($folder_tmp_windows_vista_sp_vm)\$($os_image)`" -O vpc -o subformat=fixed `"$($folder_tmp_windows_vista_sp_vm)\OS.vhd`""") -Wait"
+	Start-Process "$qemu_img" -ArgumentList @("convert `"$($folder_tmp_windows_vista_sp_vm)\$($os_image)`" -O vpc -o subformat=fixed `"$($folder_tmp_windows_vista_sp_vm)\OS.vhd`"") -Wait
+	
+	Write-Host " "
+	Write-Host "Make VHD Mount-WindowsImage compatible by making the VHD not sparse"
+	# Mount-WindowsImage requires unencrypted, fixed size and non-sparse VHD files.
+	# For some reason VHDs are set as sparse by default. Read more in the source link.
+	# Source: https://xenotrope.blogspot.com/2020/04/making-vhd-files-in-qemu-that-work-with.html
+	Write-Host "The command: fsutil sparse setflag ""$($folder_tmp_windows_vista_sp_vm)\OS.vhd"" 0"
+	fsutil sparse setflag "$($folder_tmp_windows_vista_sp_vm)\OS.vhd" 0
+	# List if VHD is sparse now.
+	Write-Host "The command: fsutil sparse queryflag ""$($folder_tmp_windows_vista_sp_vm)\OS.vhd"""
+	fsutil sparse queryflag "$($folder_tmp_windows_vista_sp_vm)\OS.vhd"
+	
+	mkdir $folder_tmp_windows_vista_sp_vm_mount
+	Write-Host " "
+	Write-Host "Mount the VHD HDD image"
+	Write-Host "The command: Mount-WindowsImage -ImagePath ""$($folder_tmp_windows_vista_sp_vm)\OS.vhd"" -Index 1 -Path ""$folder_tmp_windows_vista_sp_vm_mount"" " #-ReadOnly
+	Mount-WindowsImage -ImagePath "$($folder_tmp_windows_vista_sp_vm)\OS.vhd" -Index 1 -Path "$folder_tmp_windows_vista_sp_vm_mount" #-ReadOnly
+	
+	Write-Host " "
+	Write-Host "Delete unwanted folders and files from ""$folder_tmp_windows_vista_sp_vm_mount"""
+	Write-Host "The command: Get-ChildItem -Path  ""$folder_tmp_windows_vista_sp_vm_mount"" | Select -ExpandProperty Name | Where {$_ -notin $win_vista_sp_wim_keep_folders} | Remove-Item -Recurse -force "
+	Get-ChildItem -Path "$folder_tmp_windows_vista_sp_vm_mount" | Select -ExpandProperty FullName | Where {$_ -notin $win_vista_sp_wim_keep_folders} | Remove-Item -Recurse -Force 
+		
+	Write-Host " "
+	Write-Host "Create updated install.wim from mounted VHD"
+	Write-Host "The command: Start-Process ""$imagex"" -ArgumentList @(""/compress maximum /flags `"$flags`" /capture `"$folder_tmp_windows_vista_sp_vm_mount`"  `"$($folder_tmp_windows_vista_sp_vm)\install.wim`" `"$flags`" "") -Wait"
+	Start-Process "$imagex" -ArgumentList @("/compress maximum /flags `"$flags`" /capture `"$folder_tmp_windows_vista_sp_vm_mount`"  `"$($folder_tmp_windows_vista_sp_vm)\install.wim`" `"$flags`" ") -NoNewWindow -Wait
 
-	Write-Host " "
-	Write-Host "Install Windows Vista SP1 Prerequisites"
-	
-	Write-Host "The command: Start-Process ""$($pkgmgr)"" -ArgumentList @(""/ip /m:`"$($folder_tmp_windows_vista_sp1_pre)\$($win_vista_pre1_sp1_cab)`" /o:`"$($folder_tmp)\mount;$($folder_tmp)\mount\Windows`" /s:`"$($sandbox)`""") -NoNewWindow -Wait"
-	Start-Process "$($pkgmgr)" -ArgumentList @("/ip /m:`"$($folder_tmp_windows_vista_sp1_pre)\$($win_vista_pre1_sp1_cab)`" /o:`"$($folder_tmp)\mount;$($folder_tmp)\mount\Windows`" /s:`"$($sandbox)`" /l:log_pkgmgr.txt") -NoNewWindow -Wait
-	Remove-Item "`"$($sandbox)\*`"" -Force -Confirm:$false -ErrorAction SilentlyContinue
-
-	Write-Host "The command: Start-Process ""$($pkgmgr)"" -ArgumentList @(""/ip /m:`"$($folder_tmp_windows_vista_sp1_pre)\$($win_vista_pre2_sp1_cab)`" /o:`"$($folder_tmp)\mount;$($folder_tmp)\mount\Windows`" /s:`"$($sandbox)`""") -NoNewWindow -Wait"
-	Start-Process "$($pkgmgr)" -ArgumentList @("/ip /m:`"$($folder_tmp_windows_vista_sp1_pre)\$($win_vista_pre2_sp1_cab)`" /o:`"$($folder_tmp)\mount;$($folder_tmp)\mount\Windows`" /s:`"$($sandbox)`" /l:log_pkgmgr.txt") -NoNewWindow -Wait
-	Remove-Item "`"$($sandbox)\*`"" -Force -Confirm:$false -ErrorAction SilentlyContinue
-
-	Write-Host "The command: Start-Process ""$($pkgmgr)"" -ArgumentList @(""/ip /m:`"$($folder_tmp_windows_vista_sp1_pre)\$($win_vista_pre3_sp1_cab)`" /o:`"$($folder_tmp)\mount;$($folder_tmp)\mount\Windows`" /s:`"$($sandbox)`""") -NoNewWindow -Wait"
-	Start-Process "$($pkgmgr)" -ArgumentList @("/ip /m:`"$($folder_tmp_windows_vista_sp1_pre)\$($win_vista_pre3_sp1_cab)`" /o:`"$($folder_tmp)\mount;$($folder_tmp)\mount\Windows`" /s:`"$($sandbox)`" /l:log_pkgmgr.txt") -NoNewWindow -Wait
-	Remove-Item "`"$($sandbox)\*`"" -Force -Confirm:$false -ErrorAction SilentlyContinue
-	
-	Write-Host "The command: Start-Process ""$($pkgmgr)"" -ArgumentList @(""/ip /m:`"$($folder_tmp_windows_vista_sp1_pre)\$($win_vista_pre4_sp1_cab)`" /o:`"$($folder_tmp)\mount;$($folder_tmp)\mount\Windows`" /s:`"$($sandbox)`""") -NoNewWindow -Wait"
-	Start-Process "$($pkgmgr)" -ArgumentList @("/ip /m:`"$($folder_tmp_windows_vista_sp1_pre)\$($win_vista_pre4_sp1_cab)`" /o:`"$($folder_tmp)\mount;$($folder_tmp)\mount\Windows`" /s:`"$($sandbox)`" /l:log_pkgmgr.txt") -NoNewWindow -Wait
-	Remove-Item "`"$($sandbox)\*`"" -Force -Confirm:$false -ErrorAction SilentlyContinue
-	
+	# The Windows Vista DVD installer doesn't like WIMs made by this DISM command it seems
+	#Dism /Capture-Image /ImageFile:"$($folder_tmp_windows_vista_sp_vm)\install.wim" /CaptureDir:"$folder_tmp_windows_vista_sp_vm_mount" /Name:"$flags"
 	
 	Write-Host " "
-	Write-Host "Install Windows Vista SP1 (4 smaller cabs and then the main SP1 cab itself)"
+	Write-Host "Dismount VHD"
+	Write-Host "The command: Dismount-WindowsImage -Path ""$folder_tmp_windows_vista_sp_vm_mount"" -Discard"
+	Dismount-WindowsImage -Path "$folder_tmp_windows_vista_sp_vm_mount" -Discard
 	
 	Write-Host " "
-	Write-Host "The command: Start-Process ""$($pkgmgr)"" -ArgumentList @(""/ip /m:`"$($folder_tmp_windows_vista_sp1)\$($win_vista_sp1_pre1)`" /o:`"$($folder_tmp)\mount;$($folder_tmp)\mount\Windows`" /s:`"$($sandbox)`""") -NoNewWindow -Wait"
-	Start-Process "$($pkgmgr)" -ArgumentList @("/ip /m:`"$($folder_tmp_windows_vista_sp1)\$($win_vista_sp1_pre1)`" /o:`"$($folder_tmp)\mount;$($folder_tmp)\mount\Windows`" /s:`"$($sandbox)`" /l:log_pkgmgr.txt") -NoNewWindow -Wait
-	Remove-Item "`"$($sandbox)\*`"" -Force -Confirm:$false -ErrorAction SilentlyContinue
-	
-	Write-Host " "
-	Write-Host "The command: Start-Process ""$($pkgmgr)"" -ArgumentList @(""/ip /m:`"$($folder_tmp_windows_vista_sp1)\$($win_vista_sp1_pre2)`" /o:`"$($folder_tmp)\mount;$($folder_tmp)\mount\Windows`" /s:`"$($sandbox)`""") -NoNewWindow -Wait"
-	Start-Process "$($pkgmgr)" -ArgumentList @("/ip /m:`"$($folder_tmp_windows_vista_sp1)\$($win_vista_sp1_pre2)`" /o:`"$($folder_tmp)\mount;$($folder_tmp)\mount\Windows`" /s:`"$($sandbox)`" /l:log_pkgmgr.txt") -NoNewWindow -Wait
-	Remove-Item "`"$($sandbox)\*`"" -Force -Confirm:$false -ErrorAction SilentlyContinue
-	
-	Write-Host " "
-	Write-Host "The command: Start-Process ""$($pkgmgr)"" -ArgumentList @(""/ip /m:`"$($folder_tmp_windows_vista_sp1)\$($win_vista_sp1_pre3)`" /o:`"$($folder_tmp)\mount;$($folder_tmp)\mount\Windows`" /s:`"$($sandbox)`""") -NoNewWindow -Wait"
-	Start-Process "$($pkgmgr)" -ArgumentList @("/ip /m:`"$($folder_tmp_windows_vista_sp1)\$($win_vista_sp1_pre3)`" /o:`"$($folder_tmp)\mount;$($folder_tmp)\mount\Windows`" /s:`"$($sandbox)`" /l:log_pkgmgr.txt") -NoNewWindow -Wait
-	Remove-Item "`"$($sandbox)\*`"" -Force -Confirm:$false -ErrorAction SilentlyContinue
-	
-	Write-Host " "
-	Write-Host "The command: Start-Process ""$($pkgmgr)"" -ArgumentList @(""/ip /m:`"$($folder_tmp_windows_vista_sp1)\$($win_vista_sp1_pre4)`" /o:`"$($folder_tmp)\mount;$($folder_tmp)\mount\Windows`" /s:`"$($sandbox)`""") -NoNewWindow -Wait"
-	Start-Process "$($pkgmgr)" -ArgumentList @("/ip /m:`"$($folder_tmp_windows_vista_sp1)\$($win_vista_sp1_pre4)`" /o:`"$($folder_tmp)\mount;$($folder_tmp)\mount\Windows`" /s:`"$($sandbox)`" /l:log_pkgmgr.txt") -NoNewWindow -Wait
-	Remove-Item "`"$($sandbox)\*`"" -Force -Confirm:$false -ErrorAction SilentlyContinue
-	
-	Write-Host " "
-	Write-Host "The command: Start-Process ""$($pkgmgr)"" -ArgumentList @(""/ip /m:`"$($folder_tmp)\Updated_$($win_vista_sp1_cab)`" /o:`"$($folder_tmp)\mount;$($folder_tmp)\mount\Windows`" /s:`"$($sandbox)`""") -NoNewWindow -Wait"
-	Start-Process "$($pkgmgr)" -ArgumentList @("/ip /m:`"$($folder_tmp)\Updated_$($win_vista_sp1_cab)`" /o:`"$($folder_tmp)\mount;$($folder_tmp)\mount\Windows`" /s:`"$($sandbox)`"") -NoNewWindow -Wait
-	Remove-Item "`"$($sandbox)\*`"" -Force -Confirm:$false -ErrorAction SilentlyContinue
-	
-	# Sources: 
-	# - https://davestechnology.blogspot.com/2014/06/manually-install-msu-or-cab-files.html
-	# - https://msfn.org/board/topic/116725-tutorial-how-to-slipstream-vista-sp1-into-vista-rtm-using-waik/
-	# - https://www.microsoft.com/nb-no/download/details.aspx?id=9085
-	# - https://download.microsoft.com/download/9/c/d/9cdfa30e-5901-40e4-b6bf-4a0086ea0a6a/6001.18000.080118-1840-kb3aikl_en.iso
+	Write-Host "Copy updated install.wim to the ISO folder"
+	Write-Host "The command: Copy-item -Force ""$($folder_tmp_windows_vista_sp_vm)\install.wim"" -Destination ""$($folder_windows_iso)\sources\install.wim"""
+	Copy-item -Force "$($folder_tmp_windows_vista_sp_vm)\install.wim" -Destination "$($folder_windows_iso)\sources\install.wim"
 }
+
+# Mount install.wim
+Mount-Wim
 
 ### Windows 7 Service Pack 1 ###
 # Install Service Pack 1 if it's Windows 7, has Service Pack Level 0 and the service pack file exists
-if ($dvd_windows_version -eq $dvd_version_win7 -And $dvd_servicepack_level -eq "0" -And [System.IO.File]::Exists("$($folder_cwd_windows7_sp1)\$($win7_sp1_exe)")) {
+if ($dvd_windows -eq $dvd_version_win7 -And $dvd_servicepack_level -eq "0" -And [System.IO.File]::Exists("$($folder_cwd_windows7_sp1)\$($win7_sp1_exe)")) {
 	Write-Host " "
 	Write-Host "Update ""$($folder_tmp)\mount"" with the update ""$($folder_cwd_windows7_sp1)\$($win7_pre_sp1)"""
 	Dism /Image:"$($folder_tmp)\mount" /Add-Package /PackagePath:"$($folder_cwd_windows7_sp1)\$($win7_pre_sp1)"
@@ -1011,11 +970,11 @@ if ($dvd_windows_version -eq $dvd_version_win7 -And $dvd_servicepack_level -eq "
 
 
 ### Windows Updates ###
-if ($dvd_windows_version -eq $dvd_version_win_vista) {
+if ($dvd_windows -eq $dvd_version_win_vista) {
 	Write-Host " "
 	Write-Host "Windows Vista updates"
 	Write-Host "TBD"
-} elseif ($dvd_windows_version -eq $dvd_version_win7) {
+} elseif ($dvd_windows -eq $dvd_version_win7) {
 	## Windows 7 ##
 	
 	# Updates - Subfolders
@@ -1083,10 +1042,17 @@ if ($dvd_windows_version -eq $dvd_version_win_vista) {
 # Unmount and commit changes to install.wim
 Unmount-Image-Commit
 
+### Copy DVD folder with custom content
+if(Test-Path -Path "$folder_copy_to_iso"){
+	Write-Host " "
+	Write-Host "Copying the ""$folder_copy_to_iso"" folder to ""$($folder_windows_iso)"". It will be included in the finished ISO."
+	Copy-item -Force -Recurse "$folder_copy_to_iso\*" -Destination "$($folder_windows_iso)\"
+}
+
 ###################
 ### Create ISOs ###
 ###################
-if ($dvd_windows_version -eq $dvd_version_win_vista) {
+if ($dvd_windows -eq $dvd_version_win_vista) {
 	# Windows Vista ISO
 	if(([System.IO.File]::Exists("$($folder_windows_iso)\boot\etfsboot.com"))){
 		# Use ISOs etfsboot if it exists
@@ -1095,7 +1061,7 @@ if ($dvd_windows_version -eq $dvd_version_win_vista) {
 		# Use WAIKs etfsboot as fallback
 		& $oscdimg -m -o -h -u2 -udfver102 -b"$($etfsboot)" "$($folder_windows_iso)" "$($PWD)\$($dvd_target_name)"
 	}
-} elseif ($dvd_windows_version -eq $dvd_version_win7) {
+} elseif ($dvd_windows -eq $dvd_version_win7) {
 	# Windows 7 ISO
 	& $oscdimg -m -o -h -u2 -udfver102 -b"$($folder_windows_iso)\boot\etfsboot.com" "$($folder_windows_iso)" "$($PWD)\$($dvd_target_name)"
 } else {
@@ -1107,6 +1073,20 @@ if ($dvd_windows_version -eq $dvd_version_win_vista) {
 Write-Host " "
 Write-Host "Finished creating the Windows ISOs!"
 Write-Host "Windows DVD: $($PWD)\$($dvd_target_name)"
+
+
+Write-Host " "
+[string]$selection = Read-Host "Keep temporary files? (y/N) "
+if($selection -eq $null -Or $selection -eq "" -Or $selection -eq "n" -Or $selection -eq "N"){
+	Write-Output "You chose: $selection"
+	Write-Output "Deleting temporary files!"
+	
+	attrib -r -h "$($folder_tmp)" /s /d
+	Remove-Item "$($folder_tmp)" -Recurse -Force -Confirm:$false -ErrorAction SilentlyContinue
+}else{
+	Write-Output "You chose: $selection"
+	Write-Output "Keeping the temporary files!"
+}
 
 
 Write-Host " "

@@ -1,7 +1,7 @@
-*.exe
-*.iso
-*.txt
-TMP*
-Copy To ISO*
-Windows Vista*
-Windows 7*
+/*.exe
+/*.iso
+/*.txt
+/TMP*
+/Copy To ISO*
+/Windows Vista*
+/Windows 7*
