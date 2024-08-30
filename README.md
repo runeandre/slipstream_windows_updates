@@ -19,8 +19,8 @@ Script runs on Windows 7 and newer (Tested in Windows 7 and 11).
     
 	| Architecture | Script | Update type |
 	| --- | --- | --- |
-	| <b>x86</b> | <b>[Download Windows Vista Updates x86.bat](https://github.com/runeandre/slipstream_windows_updates/blob/main/Download%20Windows%20Vista%20x86%20Updates.bat)</b> | <b>Normal Updates</b> |
-	| <b>x64</b> | <b>[Download Windows Vista Updates x64.bat](https://github.com/runeandre/slipstream_windows_updates/blob/main/Download%20Windows%20Vista%20x64%20Updates.bat)</b> | <b>Normal Updates</b> |
+	| <b>x86</b> | <b>[Download Windows Vista Updates x86.bat](https://github.com/runeandre/slipstream_windows_updates/blob/main/Download%20Windows%20Vista%20Updates%20x86.bat)</b> | <b>Normal Updates</b> |
+	| <b>x64</b> | <b>[Download Windows Vista Updates x64.bat](https://github.com/runeandre/slipstream_windows_updates/blob/main/Download%20Windows%20Vista%20Updates%20x64.bat)</b> | <b>Normal Updates</b> |
 	
 	(x64 = 64-bit / x86 = 32-bit)
 
