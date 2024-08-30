@@ -6,9 +6,18 @@ Slipstreaming Windows 10 and 11 updates and producing a bootable ISO should also
 
 <b>Disclaimer: It's assumed you have any licenses needed to use the ISO's or updates!</b>
 
+![Run Update ISO and select Windows version](Screenshots/RunScriptVista.png)
+
 # Guide
 
-Script runs on Windows 7 and newer (Tested in Windows 7 and 11).
+The script runs on Windows 7 and newer (Tested in Windows 7 and 11).
+
+- Blue: The main script that integrates the updates into the ISO file.
+- Red: The source "Windows.iso" file that is updated.
+- Orange: Scripts to download Windows 7 updates
+- Green: Scripts to download Windows Vista updates
+
+![Various scripts and the ISO file](Screenshots/ScriptsAndISO.png)
 
 ## Windows Vista
 
@@ -91,6 +100,8 @@ This script has mainly been tested with the Windows Vista x64 RTM DVD "en_window
 Using official Windows Vista ISOs with Service Pack 2 already slipstreamed is not a bad idea if possible!
 <br>But that might not be an option with OEM specific Windows versions for instance.
 <br>In that case then this script is an option, there are also other options like vLite (commercial product).
+
+![Windows Vista installed into a VM](./Screenshots/VmWindowsVista_Setup1.png)
 
 #### Service Pack 1
 
