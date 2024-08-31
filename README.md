@@ -48,6 +48,10 @@ The script runs on Windows 7 and newer (Tested in Windows 7 and 11).
 <br>- The "Windows.iso" file is NOT updated.
 <br>- A new Windows ISO file is created, and the filename is specified when the script is finished.
 
+### WARNING!
+If there is an <b>error during execution</b> with no obvious cause, <b>restart the PC</b> and rerun the script.
+<br>Things seem to fail randomly sometimes when the VM is running, but completes properly and produces a working ISO image simply by rerunning the script with no additional changes (other than a reboot perhaps).
+
 ## Windows 7
 
 1. [Download these scripts](https://github.com/runeandre/slipstream_windows_updates/archive/refs/heads/main.zip), extract the scripts into a folder and open that folder.
@@ -101,7 +105,7 @@ Using official Windows Vista ISOs with Service Pack 2 already slipstreamed is no
 <br>But that might not be an option with OEM specific Windows versions for instance.
 <br>In that case then this script is an option, there are also other options like vLite (commercial product).
 
-![Windows Vista installed into a VM](./Screenshots/VmWindowsVista_Setup1.png)
+![Windows Vista installed into a VM](./Screenshots/VmWindowsVista_Setup2.png)
 
 #### Service Pack 1
 
