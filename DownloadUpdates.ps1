@@ -35,6 +35,11 @@ $folder_cwd_windows7_updates = "$($folder_cwd_windows7)\Updates"
 $folder_cwd_windows7_sp1 = "$($folder_cwd_windows7)\Service Pack 1"
 $folder_cwd_windows7_ie11 = "$($folder_cwd_windows7)\Internet Explorer 11"
 
+# ESU script
+$folder_win7_esuscript = "$($PWD)\Windows 7\ESU Script"
+$win7_esuscript_cmd = "$($folder_win7_esuscript)\Wim-Integration.cmd"
+
+
 if ($windows -eq $windows_vista_x86) {
 	Write-Host " "
 	Write-Host "Download Windows Vista x86 Updates"
@@ -343,6 +348,16 @@ if ($windows -eq $windows_vista_x86) {
 	Invoke-WebRequest "https://catalog.s.download.windowsupdate.com/d/msdownload/update/software/uprl/2020/09/windows6.1-kb4566371-x86_5f2f1263346a6a0158087fa71ef068540552d1d7.msu" -OutFile "$($folder_cwd_windows7_updates)\99\windows6.1-kb4566371-x86_5f2f1263346a6a0158087fa71ef068540552d1d7.msu"
 	Invoke-WebRequest "https://catalog.s.download.windowsupdate.com/c/msdownload/update/software/uprl/2020/10/windows6.1-kb4578623-x86_11ffee2bac9f998623938836968a738d35af51df.msu" -OutFile "$($folder_cwd_windows7_updates)\99\windows6.1-kb4578623-x86_11ffee2bac9f998623938836968a738d35af51df.msu"
 	Invoke-WebRequest "https://catalog.s.download.windowsupdate.com/d/msdownload/update/software/uprl/2021/04/windows6.1-kb4601275-x86_8f127a2ce3fa65c11f3824998e95da4d211f100c.msu" -OutFile "$($folder_cwd_windows7_updates)\99\windows6.1-kb4601275-x86_8f127a2ce3fa65c11f3824998e95da4d211f100c.msu"
+	
+	if(-Not (Test-Path -Path "$folder_win7_esuscript")){
+		mkdir "$($folder_win7_esuscript)"
+		Invoke-Item "$folder_win7_esuscript"
+	}
+	
+	Write-Host " "
+	Write-Host "You need a script that enables Windows 7 ESU updates."
+	Write-Host "Add a script with the following name and folder location: ""$win7_esuscript_cmd""."
+	Write-Host " "
 } elseif ($windows -eq $windows7_x64_esu) {
 	Write-Host " "
 	Write-Host "#########################################"
@@ -380,6 +395,16 @@ if ($windows -eq $windows_vista_x86) {
 	Invoke-WebRequest "https://catalog.s.download.windowsupdate.com/d/msdownload/update/software/uprl/2020/09/windows6.1-kb4566371-x64_d558c4dacfbea4e754788bf98db998a119d77305.msu" -OutFile "$($folder_cwd_windows7_updates)\99\windows6.1-kb4566371-x64_d558c4dacfbea4e754788bf98db998a119d77305.msu"
 	Invoke-WebRequest "https://catalog.s.download.windowsupdate.com/d/msdownload/update/software/uprl/2020/10/windows6.1-kb4578623-x64_dcbc342c60cc1c6c4ca8559430008a8191e64455.msu" -OutFile "$($folder_cwd_windows7_updates)\99\windows6.1-kb4578623-x64_dcbc342c60cc1c6c4ca8559430008a8191e64455.msu"
 	Invoke-WebRequest "https://catalog.s.download.windowsupdate.com/d/msdownload/update/software/uprl/2021/04/windows6.1-kb4601275-x64_00d4557308ead569110ca3455205375984afde76.msu" -OutFile "$($folder_cwd_windows7_updates)\99\windows6.1-kb4601275-x64_00d4557308ead569110ca3455205375984afde76.msu"
+	
+	if(-Not (Test-Path -Path "$folder_win7_esuscript")){
+		mkdir "$($folder_win7_esuscript)"
+		Invoke-Item "$folder_win7_esuscript"
+	}
+	
+	Write-Host " "
+	Write-Host "You need a script that enables Windows 7 ESU updates."
+	Write-Host "Add a script with the following name and folder location: ""$win7_esuscript_cmd""."
+	Write-Host " "
 }
 
 Write-Host " "

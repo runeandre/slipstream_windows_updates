@@ -154,7 +154,7 @@ $win7_sp1_KB976933_LangsCab6_cab = "KB976933-LangsCab6.cab"
 
 # ESU script
 $folder_win7_esuscript = "$($PWD)\Windows 7\ESU Script"
-$win7_esuscript_cmd = "$($folder_win7_esuscript)\ESU_Script.cmd"
+$win7_esuscript_cmd = "$($folder_win7_esuscript)\Wim-Integration.cmd"
 
 
 ### Choose architecture settings matching the OS ###
@@ -559,14 +559,14 @@ if ($dvd_windows -eq $dvd_version_win_vista) {
 if(-Not (Test-Path -Path "$folder_copy_to_iso")){
 	mkdir "$($folder_copy_to_iso)"
 		
-		Write-Host " "
-		Write-Host "The folder ""$($folder_copy_to_iso)"" was missing and has been created."
-		Write-Host "Any files or folders you put here will be copied onto the finished ISO"
-		Write-Host " "
-		Write-Host "Press any key to continue!"
-		Write-Host " "
-		
-		Pause
+	Write-Host " "
+	Write-Host "The folder ""$($folder_copy_to_iso)"" was missing and has been created."
+	Write-Host "Any files or folders you put here will be copied onto the finished ISO"
+	Write-Host " "
+	Write-Host "Press any key to continue!"
+	Write-Host " "
+	
+	Pause
 }
 
 Write-Host " "
